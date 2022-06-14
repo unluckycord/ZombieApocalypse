@@ -61,10 +61,10 @@ ZOMBIEATTACK9 = pygame.mixer.Sound("Assets/sounds/enemySounds/Zombie-Aggressive-
 
 
 #Backgrounds
-mainMenuBackground = pygame.transform.scale(pygame.image.load("Assets/backgrounds/menu.png"), (WIDTH, HEIGHT))
-blackBackground = pygame.transform.scale(pygame.image.load("Assets/backgrounds/blackButton.png"), (300, 70))
-REF = pygame.image.load("Assets/backgrounds/re.png")
-MUSICON = pygame.transform.scale(pygame.image.load("Assets/backgrounds/musicOn.png"),(PLAYERW,PLAYERH))
-MUSICOFF = pygame.transform.scale(pygame.image.load("Assets/backgrounds/musicOff.png"),(PLAYERW,PLAYERH))
-BUILDING = pygame.transform.scale(pygame.image.load("Assets/sprites/house.png"),(550,500))
+#mainMenuBackground = pygame.transform.scale(pygame.image.load("Assets/backgrounds/menu.png"), (WIDTH, HEIGHT))
+#blackBackground = pygame.transform.scale(pygame.image.load("Assets/backgrounds/blackButton.png"), (300, 70))
+#REF = pygame.image.load("Assets/backgrounds/re.png")
+#MUSICON = pygame.transform.scale(pygame.image.load("Assets/backgrounds/musicOn.png"),(PLAYERW,PLAYERH))
+#MUSICOFF = pygame.transform.scale(pygame.image.load("Assets/backgrounds/musicOff.png"),(PLAYERW,PLAYERH))
+#BUILDING = pygame.transform.scale(pygame.image.load("Assets/sprites/house.png"),(550,500))
 GROUND = pygame.transform.scale(pygame.image.load("Assets/backgrounds/ground.png"),(3060,2020))
