@@ -5,8 +5,7 @@ clock = pygame.time.Clock()
 run = True
 START_FONT = pygame.font.SysFont("Horror Poster Trajan Pro",40)
 START_FONT_SMALL = pygame.font.SysFont("Horror Poster Trajan Pro",20)
-Round = 1
-WIDTH, HEIGHT = 1200, 900
+WIDTH, HEIGHT = 1200, 800
 CENTERX, CENTERY = WIDTH//2-50, HEIGHT//2-50
 WHITE = (255,255,255)
 RED = (255,0,0)
@@ -27,6 +26,7 @@ playerSpriteIdelShotgun = pygame.transform.scale(pygame.image.load(
     "Assets/sprites/playerSprites/shotgun/idle/playerIdelShotgun.png"), (PLAYERW, PLAYERH))
 playerSpriteIdelHandgun = pygame.transform.scale(pygame.image.load(
     "Assets/sprites/playerSprites/handgun/idle/playerIdelHandgun.png"), (PLAYERW, PLAYERH))
+playerHealthSprite = pygame.transform.scale(pygame.image.load("Assets/sprites/playerSprites/heart.png"), (70,70))
 
 playerSpriteAK47Muzzle = pygame.transform.scale(pygame.image.load(
     "Assets/sprites/playerSprites/rifle/shoot/playerShootingAK47.png"), (PLAYERW, PLAYERH))
@@ -34,6 +34,8 @@ playerSpriteShotgunMuzzle = pygame.transform.scale(pygame.image.load(
     "Assets/sprites/playerSprites/shotgun/shoot/playerShootingShotgun.png"), (PLAYERW, PLAYERH))
 playerSpriteHandgunMuzzle = pygame.transform.scale(pygame.image.load(
     "Assets/sprites/playerSprites/handgun/shoot/playerShootingHandgun.png"), (PLAYERW, PLAYERH))
+playerBullet = pygame.transform.scale(pygame.image.load(
+    "/Users/unluckycord/python_projects/pythonGame/Assets/sprites/bullet.png"), (20,20))
 
 #audio for player
 WALKINGCONCRETE = pygame.mixer.Sound("Assets/sounds/playerSounds/walkingConcrete.wav")
@@ -61,10 +63,17 @@ ZOMBIEATTACK9 = pygame.mixer.Sound("Assets/sounds/enemySounds/Zombie-Aggressive-
 
 
 #Backgrounds
-#mainMenuBackground = pygame.transform.scale(pygame.image.load("Assets/backgrounds/menu.png"), (WIDTH, HEIGHT))
-#blackBackground = pygame.transform.scale(pygame.image.load("Assets/backgrounds/blackButton.png"), (300, 70))
-#REF = pygame.image.load("Assets/backgrounds/re.png")
-#MUSICON = pygame.transform.scale(pygame.image.load("Assets/backgrounds/musicOn.png"),(PLAYERW,PLAYERH))
-#MUSICOFF = pygame.transform.scale(pygame.image.load("Assets/backgrounds/musicOff.png"),(PLAYERW,PLAYERH))
-#BUILDING = pygame.transform.scale(pygame.image.load("Assets/sprites/house.png"),(550,500))
-GROUND = pygame.transform.scale(pygame.image.load("Assets/backgrounds/ground.png"),(3060,2020))
+mainMenuBackground = pygame.transform.scale(pygame.image.load("Assets/backgrounds/menu.png"), (WIDTH, HEIGHT))
+blackBackground = pygame.transform.scale(pygame.image.load("Assets/backgrounds/blackButton.png"), (300, 70))
+REF = pygame.image.load("Assets/backgrounds/re.png")
+MUSICON = pygame.transform.scale(pygame.image.load("Assets/backgrounds/musicOn.png"),(PLAYERW,PLAYERH))
+MUSICOFF = pygame.transform.scale(pygame.image.load("Assets/backgrounds/musicOff.png"),(PLAYERW,PLAYERH))
+BUILDING = pygame.transform.scale(pygame.image.load("Assets/sprites/house.png"),(550,500))
+GROUND = pygame.transform.scale(pygame.image.load("Assets/backgrounds/ground.png"),(6120,4040))
+#Sounds
+BACKGROUNDMAP1 = pygame.mixer.Sound("Assets/sounds/music/VOICES.wav")
+MAINMENUTHEME = pygame.mixer.Sound("Assets/sounds/music/HorrorSoundscape.wav")
+FADESFX = pygame.mixer.Sound("Assets/sounds/fade.wav")
+GAMELOST = pygame.mixer.Sound("Assets/sounds/game_lose.wav")
+GAMEWON = pygame.mixer.Sound("Assets/sounds/game_win.wav")
+MENUCONFIRM = pygame.mixer.Sound("Assets/sounds/menuConfirm.wav")

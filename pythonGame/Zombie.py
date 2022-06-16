@@ -1,5 +1,5 @@
 class Zombie:
-    def __init__(self,zombieCount,MAXHEALTH, zombieHealth, zombieTakingDamage, damageAmount, dealingDamage, sprite, zombiex, zombiey, zombiew, zombieh, randomZombieDamageSounds, randomZombieHurtSounds):
+    def __init__(self,zombieCount,MAXHEALTH, zombieHealth, zombieTakingDamage, damageAmount, dealingDamage, sprite, zombiex, zombiey, zombiew, zombieh, randomZombieDamageSounds, randomZombieHurtSounds, canBeHit):
         self.zombieCount = zombieCount
         self.MAXHEALTH = MAXHEALTH
         self.zombieHealth = zombieHealth
@@ -13,6 +13,7 @@ class Zombie:
         self.zombieh = zombieh
         self.randomZombieDamageSounds = randomZombieDamageSounds
         self.randomZombieHurtSounds = randomZombieHurtSounds
+        self.canBeHit = canBeHit
         
     def getZombieCount(self):
         return self.zombieCount
@@ -40,21 +41,20 @@ class Zombie:
         return self.randomZombieDamageSounds
     def getRandomZombieHurtSounds(self):
         return self.randomZombieHurtSounds
+    def getZombieHitbox(self):
+        return ((self.zombiex , self.zombiey), (self.zombiex+self.zombiew, self.zombiey), (self.zombiex, self.zombiey+self.zombieh), (self.zombiex+self.zombiew, self.zombiey+self.zombieh))
+    def getCanBeHit(self):
+        return self.canBeHit    
     
     def zombieMovement(self, player):
-        if self.zombiex >= player.getPlayerx():
+        if self.zombiex >= player.getPlayerx() :
             self.zombiex -= 1
         if self.zombiex <= player.getPlayerx():
             self.zombiex += 1
         if self.zombiey >= player.getPlayery():
             self.zombiey -= 1
-        if self.zombiey < player.getPlayery():
+        if self.zombiey <= player.getPlayery():
             self.zombiey += 1
     def zombieDamage(self, player):
-        ##print(self.zombiex-player.getPlayerx(), self.zombiey-player.getPlayery())
-        if self.zombieHealth > 0 and -20 < self.zombiex - player.getPlayerx() < 30 and -20 < self.zombiey - player.getPlayery() < 30:
-            player.playerTakingDamage = True
-            player.playerHealth -= 0.005
-            
-        else:
-            player.playerTakingDamage = False
+        if player.playerTakingDamage == True:
+            player.playerHealth -= self.damageAmount
