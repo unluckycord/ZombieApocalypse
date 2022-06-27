@@ -9,8 +9,10 @@ WIDTH, HEIGHT = 1200, 800
 CENTERX, CENTERY = WIDTH//2-50, HEIGHT//2-50
 WHITE = (255,255,255)
 RED = (255,0,0)
+YELLOW = (255,255,0)
 BLACK = (0,0,0)
-FPS = 120
+GREY = (169,169,169)
+TARGETFPS = 120
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 PLAYERW, PLAYERH = 75,75
 
@@ -35,10 +37,13 @@ playerSpriteShotgunMuzzle = pygame.transform.scale(pygame.image.load(
 playerSpriteHandgunMuzzle = pygame.transform.scale(pygame.image.load(
     "Assets/sprites/playerSprites/handgun/shoot/playerShootingHandgun.png"), (PLAYERW, PLAYERH))
 playerBullet = pygame.transform.scale(pygame.image.load(
-    "/Users/unluckycord/python_projects/pythonGame/Assets/sprites/bullet.png"), (20,20))
+    "Assets/sprites/bullet.png"), (20,20))
+playerSlug = pygame.transform.scale(pygame.image.load(
+    "Assets/sprites/slug.png"), (20,20))
 
 #audio for player
 WALKINGCONCRETE = pygame.mixer.Sound("Assets/sounds/playerSounds/walkingConcrete.wav")
+HEALTHSHOT = pygame.mixer.Sound("Assets/sounds/playerSounds/healthsound.wav")
 
 #audio for guns
 HANDGUNSOUNDEFFECT = pygame.mixer.Sound("Assets/sounds/gunSounds/handgunShooting.wav")
@@ -60,20 +65,30 @@ ZOMBIEATTACK6 = pygame.mixer.Sound("Assets/sounds/enemySounds/Zombie-Aggressive-
 ZOMBIEATTACK7 = pygame.mixer.Sound("Assets/sounds/enemySounds/Zombie-Aggressive-Attack-A7.mp3")
 ZOMBIEATTACK8 = pygame.mixer.Sound("Assets/sounds/enemySounds/Zombie-Aggressive-Attack-A8.mp3")
 ZOMBIEATTACK9 = pygame.mixer.Sound("Assets/sounds/enemySounds/Zombie-Aggressive-Attack-A9.mp3")
+ZOMBIEHURT1 = pygame.mixer.Sound("Assets/sounds/enemySounds/zombie_hit1.wav")
+ZOMBIEHURT2 = pygame.mixer.Sound("Assets/sounds/enemySounds/zombie_hit2.wav")
+ZOMBIEHURT3 = pygame.mixer.Sound("Assets/sounds/enemySounds/zombie_hit3.wav")
 
 
 #Backgrounds
-mainMenuBackground = pygame.transform.scale(pygame.image.load("Assets/backgrounds/menu.png"), (WIDTH, HEIGHT))
-blackBackground = pygame.transform.scale(pygame.image.load("Assets/backgrounds/blackButton.png"), (300, 70))
+mainMenuBackground = pygame.transform.scale(pygame.image.load("Assets/backgrounds/menu.jpeg"), (WIDTH, HEIGHT))
+gunShopBackground = pygame.transform.scale(pygame.image.load("Assets/backgrounds/gunShop.png"),(500,320))
+levelSelectionBackground = pygame.transform.scale(pygame.image.load("Assets/backgrounds/levelSelection.jpeg"), (500,320))
+backArrow = pygame.transform.rotate(pygame.transform.scale(pygame.image.load("Assets/backgrounds/backArrow.png"), (50,50)), 180)
 REF = pygame.image.load("Assets/backgrounds/re.png")
 MUSICON = pygame.transform.scale(pygame.image.load("Assets/backgrounds/musicOn.png"),(PLAYERW,PLAYERH))
-MUSICOFF = pygame.transform.scale(pygame.image.load("Assets/backgrounds/musicOff.png"),(PLAYERW,PLAYERH))
+MUSICONOFF = pygame.transform.scale(pygame.image.load("Assets/backgrounds/musicOff.png"),(PLAYERW,PLAYERH))
 BUILDING = pygame.transform.scale(pygame.image.load("Assets/sprites/house.png"),(550,500))
-GROUND = pygame.transform.scale(pygame.image.load("Assets/backgrounds/ground.png"),(6120,4040))
+GROUND = pygame.transform.scale(pygame.image.load("Assets/backgrounds/map.png"),(6000,4050))
 #Sounds
+GUNSHOPSOUND = pygame.mixer.Sound("Assets/sounds/gunSounds/gunShopSound.wav")
+CONFIM = pygame.mixer.Sound("Assets/sounds/confirm.wav")
+DECLINE = pygame.mixer.Sound("Assets/sounds/decline.mp3")
 BACKGROUNDMAP1 = pygame.mixer.Sound("Assets/sounds/music/VOICES.wav")
 MAINMENUTHEME = pygame.mixer.Sound("Assets/sounds/music/HorrorSoundscape.wav")
 FADESFX = pygame.mixer.Sound("Assets/sounds/fade.wav")
 GAMELOST = pygame.mixer.Sound("Assets/sounds/game_lose.wav")
 GAMEWON = pygame.mixer.Sound("Assets/sounds/game_win.wav")
 MENUCONFIRM = pygame.mixer.Sound("Assets/sounds/menuConfirm.wav")
+
+testSound = pygame.mixer.Sound("Assets/test.wav")

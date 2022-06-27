@@ -1,5 +1,6 @@
+from random import choice
 class Zombie:
-    def __init__(self,zombieCount,MAXHEALTH, zombieHealth, zombieTakingDamage, damageAmount, dealingDamage, sprite, zombiex, zombiey, zombiew, zombieh, randomZombieDamageSounds, randomZombieHurtSounds, canBeHit):
+    def __init__(self,zombieCount,MAXHEALTH, zombieHealth, zombieTakingDamage, damageAmount, dealingDamage, sprite, zombiex, zombiey, zombiew, zombieh, randomZombieDamageSounds, randomZombieHurtSounds, canBeHit, Vel, canWalk):
         self.zombieCount = zombieCount
         self.MAXHEALTH = MAXHEALTH
         self.zombieHealth = zombieHealth
@@ -14,6 +15,8 @@ class Zombie:
         self.randomZombieDamageSounds = randomZombieDamageSounds
         self.randomZombieHurtSounds = randomZombieHurtSounds
         self.canBeHit = canBeHit
+        self.Vel = Vel
+        self.canWalk = canWalk
         
     def getZombieCount(self):
         return self.zombieCount
@@ -41,20 +44,30 @@ class Zombie:
         return self.randomZombieDamageSounds
     def getRandomZombieHurtSounds(self):
         return self.randomZombieHurtSounds
-    def getZombieHitbox(self):
-        return ((self.zombiex , self.zombiey), (self.zombiex+self.zombiew, self.zombiey), (self.zombiex, self.zombiey+self.zombieh), (self.zombiex+self.zombiew, self.zombiey+self.zombieh))
     def getCanBeHit(self):
         return self.canBeHit    
     
-    def zombieMovement(self, player):
-        if self.zombiex >= player.getPlayerx() :
-            self.zombiex -= 1
-        if self.zombiex <= player.getPlayerx():
-            self.zombiex += 1
-        if self.zombiey >= player.getPlayery():
-            self.zombiey -= 1
-        if self.zombiey <= player.getPlayery():
-            self.zombiey += 1
+    def zombieMovement(self, player, zombieLocationsX, zombieLocationsY, zombies):
+        tempArrX = [round(self.getZombiex())]
+        tempArrY = [round(self.getZombiey())]
+        for i in range(len(zombies)):
+            if i == self.zombieCount:
+                break
+            else:
+                if zombies[i].getZombieHealth() > 0:
+                    if 0 <= abs(tempArrY[0] - zombieLocationsY[i]) < 60 and 0 <= abs(tempArrX[0] - zombieLocationsX[i]) < 60:
+                        self.canWalk = False
+                    else:
+                        self.canWalk = True
+        if self.canWalk: 
+            if self.zombiex >= player.getPlayerx():
+                self.zombiex -= self.Vel
+            if self.zombiex <= player.getPlayerx():
+                self.zombiex += self.Vel
+            if self.zombiey >= player.getPlayery():
+                self.zombiey -= self.Vel
+            if self.zombiey <= player.getPlayery():
+                self.zombiey += self.Vel
     def zombieDamage(self, player):
         if player.playerTakingDamage == True:
             player.playerHealth -= self.damageAmount

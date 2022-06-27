@@ -1,6 +1,6 @@
-import pygame
+import pygame, Grenade, Assets
 class Player:
-    def __init__(self,MAXHEALTH, playerHealth, playerTakingDamage, playerGun, isWalking, sprite ,playerx, playery, playerw , playerh, VEL, canShoot, isReloading, healablesOwned, isShooting):
+    def __init__(self,MAXHEALTH, playerHealth, playerTakingDamage, playerGun, isWalking, sprite ,playerx, playery, playerw , playerh, VEL, canShoot, isReloading, healablesOwned, isShooting, grenadeCount):
         self.MAXHEALTH = MAXHEALTH
         self.playerHealth = playerHealth
         self.playerTakingDamage = playerTakingDamage
@@ -17,6 +17,7 @@ class Player:
         self.isReloading = isReloading
         self.healablesOwned = healablesOwned
         self.isShooting = isShooting
+        self.grenadeCount = grenadeCount
     
     def getMaxhealth(self):
         return self.MAXHEALTH
@@ -49,7 +50,7 @@ class Player:
     def getIsShooting(self):
         return self.isShooting
     
-    def playerMovement(self,keysPressed, zombies, objects, gun, currentTickHeal, nowHealing, bullets):
+    def playerMovement(self,keysPressed, zombies, objects, gun, currentTickHeal, nowHealing, bullets, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade):
         if self.playerHealth > 0:
             if keysPressed[pygame.K_r] and gun[self.playerGun].currentAmmo != gun[self.playerGun].MAXAMMO:
                 self.isReloading = True
@@ -61,9 +62,20 @@ class Player:
                 self.playerGun = 1
             if keysPressed[pygame.K_3]:
                 self.playerGun = 2
-            #health shot is 4
+            
+            #grenade is 4
+            nowTossGrenade = pygame.time.get_ticks()
+            if nowTossGrenade - currentTickTossGrenade >= 3000 and self.grenadeCount > 0 and keysPressed[pygame.K_4]:
+                currentTickTossGrenade = nowTossGrenade
+                self.grenadeCount -= 1   
+                grenades.append(Grenade.Grenade(3, 50))
+                currentTickTossGrenade = nowTossGrenade
+        
+            #health shot is 5
             nowHealing = pygame.time.get_ticks()
-            if self.playerHealth < self.MAXHEALTH and nowHealing - currentTickHeal >= 3000 and self.healablesOwned > 0 and keysPressed[pygame.K_4]:
+            if self.playerHealth < self.MAXHEALTH and nowHealing - currentTickHeal >= 3000 and self.healablesOwned > 0 and keysPressed[pygame.K_5]:
+                Assets.HEALTHSHOT.play()
+                self.healablesOwned -= 1
                 currentTickHeal = nowHealing
                 self.playerHealth = self.MAXHEALTH
                 
