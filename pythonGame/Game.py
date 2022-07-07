@@ -1,6 +1,7 @@
 from array import *
 from random import choice
-import pygame,PaintGame,Assets,Player,Zombie,random,math,Objects,Guns,GameConfig,Bullet,Death, time
+import pygame,PaintGame,Assets,Player,Zombie,random,math,Objects,Guns,GameConfig,Bullet,EndGame,time
+test = True
 def playersVariables(player, gun, zombies, objects, currentTickHeal, nowHealing, angle, bullets, mousex, mousey, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade):
     #player.regenHealth()
     mouseInput = pygame.mouse.get_pressed()
@@ -9,13 +10,17 @@ def playersVariables(player, gun, zombies, objects, currentTickHeal, nowHealing,
     player.sprite = pygame.transform.rotate(currentSprite.copy(),angle)
     player.playerMovement(keysPressed, zombies, objects, gun, currentTickHeal, nowHealing, bullets, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade)
 
-def roundCount(Round):
-    if Round <= 10:
-        return random.randint(20,40)
-    elif 10 < Round <= 20:
-        return random.randint(40, 60)
+
+def roundCount(Round, maxRoundCount):
+    if Round <= maxRoundCount:
+        if Round <= 10:
+            return random.randint(20,40)
+        elif 10 < Round <= 20:
+            return random.randint(40, 60)
+        else:
+            return random.randint(60,100)
     else:
-        return random.randint(60,100)
+        EndGame.WinnerScreen()
 def randomZombiePosx(exclusion, rangeLower, rangeUpper):
     return choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
 def randomZombiePosy(exclusion, rangeLower, rangeUpper):
@@ -23,7 +28,7 @@ def randomZombiePosy(exclusion, rangeLower, rangeUpper):
 def roundTransition():
     pass
 
-def start():
+def start(maxRoundCount):
     PlayerVel = 3
     zombieVel = 1
     pistolVel = 4
@@ -162,13 +167,12 @@ def start():
         #zombies hurting player sounds
         
         if player.getPlayerHealth() < 0:
-            pass
-            #Death.deathScreen()
+            EndGame.deathScreen()
         if HealthPool <= 0:
             
             zombies.clear()
             Round += 1
-            roundCount(Round)
+            roundCount(Round, maxRoundCount)
             player.playerHealth = player.MAXHEALTH
                 
         PaintGame.drawWindow(player, zombies, objects, gun, gameConfig, bullets, angle,zombieHurtSounds, currentTickZombieTakeDamage, nowZombieTakeDamage)

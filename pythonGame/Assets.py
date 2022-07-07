@@ -73,7 +73,12 @@ ZOMBIEHURT3 = pygame.mixer.Sound("Assets/sounds/enemySounds/zombie_hit3.wav")
 #Backgrounds
 mainMenuBackground = pygame.transform.scale(pygame.image.load("Assets/backgrounds/menu.jpeg"), (WIDTH, HEIGHT))
 gunShopBackground = pygame.transform.scale(pygame.image.load("Assets/backgrounds/gunShop.png"),(500,320))
+EndlessMode = pygame.transform.scale(pygame.image.load("Assets/backgrounds/EndlessMode.jpeg"), (WIDTH//3 - 60, HEIGHT - 160))
+CampaignMode = pygame.transform.scale(pygame.image.load("Assets/backgrounds/CampaignMode.jpeg"), (WIDTH//3 - 60, HEIGHT - 160))
+placeHolder = pygame.transform.scale(pygame.image.load("Assets/backgrounds/placeHolder.png"),(WIDTH//3 - 60, HEIGHT - 160))
 levelSelectionBackground = pygame.transform.scale(pygame.image.load("Assets/backgrounds/levelSelection.jpeg"), (500,320))
+level1 = pygame.transform.scale(pygame.image.load("Assets/backgrounds/level1.jpeg"), (300, 200))
+
 backArrow = pygame.transform.rotate(pygame.transform.scale(pygame.image.load("Assets/backgrounds/backArrow.png"), (50,50)), 180)
 REF = pygame.image.load("Assets/backgrounds/re.png")
 MUSICON = pygame.transform.scale(pygame.image.load("Assets/backgrounds/musicOn.png"),(PLAYERW,PLAYERH))
