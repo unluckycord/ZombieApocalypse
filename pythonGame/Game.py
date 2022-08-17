@@ -2,10 +2,9 @@ from array import *
 from random import choice
 import pygame,PaintGame,Assets,Player,Zombie,random,math,Objects,Guns,GameConfig,Bullet,EndGame,time
 test = True
-def playersVariables(player, gun, zombies, objects, currentTickHeal, nowHealing, angle, bullets, mousex, mousey, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade):
+def playersVariables(keysPressed, player, gun, zombies, objects, currentTickHeal, nowHealing, angle, bullets, mousex, mousey, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade):
     #player.regenHealth()
     mouseInput = pygame.mouse.get_pressed()
-    keysPressed = pygame.key.get_pressed()
     currentSprite = gun[player.getPlayerGun()].getCurrentSprite()
     player.sprite = pygame.transform.rotate(currentSprite.copy(),angle)
     player.playerMovement(keysPressed, zombies, objects, gun, currentTickHeal, nowHealing, bullets, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade)
@@ -20,7 +19,7 @@ def roundCount(Round, maxRoundCount):
         else:
             return random.randint(60,100)
     else:
-        EndGame.WinnerScreen()
+        EndGame.endGameScreen(True)
 def randomZombiePosx(exclusion, rangeLower, rangeUpper):
     return choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
 def randomZombiePosy(exclusion, rangeLower, rangeUpper):
@@ -82,6 +81,7 @@ def start(maxRoundCount):
     
     Assets.BACKGROUNDMAP1.play()
     while run:
+        keysPressed = pygame.key.get_pressed()
         currentTime = time.time()
         dt = currentTime - prevTime
         prevTime = currentTime
@@ -103,7 +103,7 @@ def start(maxRoundCount):
         HealthPool = 0
         mousex, mousey = pygame.mouse.get_pos()
         angle = math.degrees(math.atan2(Assets.CENTERX-mousex+20,Assets.CENTERY-mousey+20))-270
-        playersVariables(player,gun, zombies, objects, currentTickHeal, nowHealing, angle, bullets, mousex, mousey, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade)
+        playersVariables(keysPressed,player,gun, zombies, objects, currentTickHeal, nowHealing, angle, bullets, mousex, mousey, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade)
         
         if len(zombies) < maxZombieCount:
             zombies.append(Zombie.Zombie(i, 100, 100, False, 15, False, Assets.zombieSpriteIdel, randomZombiePosx(exclusion, -3060, 3060), randomZombiePosy(exclusion, -2020, 2020), Assets.PLAYERW-10, Assets.PLAYERH-10,zombieDamageToPlayerSounds,zombieHurtSounds, True, zombieVel, True))
@@ -167,7 +167,7 @@ def start(maxRoundCount):
         #zombies hurting player sounds
         
         if player.getPlayerHealth() < 0:
-            EndGame.deathScreen()
+            EndGame.endGameScreen(False)
         if HealthPool <= 0:
             
             zombies.clear()

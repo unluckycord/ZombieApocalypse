@@ -43,11 +43,11 @@ def drawWindow(player, zombies, objects, gun, gameConfig, bullets, angle,zombieH
     
     if gameConfig.getHUD():
         #draws HUD
-        Assets.WIN.blit(Assets.START_FONT.render(str(gun[player.getPlayerGun()].getCurrentAmmo()),1, Assets.RED),((20),(20)))
+        Assets.WIN.blit(Assets.START_FONT_BOLD_ITALIC.render(str(gun[player.getPlayerGun()].getCurrentAmmo()),1, Assets.RED),((20),(20)))
         if gun[player.getPlayerGun()].getCurrentAmmo() < 10:
-            Assets.WIN.blit(Assets.START_FONT.render("/" + str(gun[player.getPlayerGun()].getMaxAmmo()),1, Assets.RED),((40),(20)))
+            Assets.WIN.blit(Assets.START_FONT_BOLD_ITALIC.render("/" + str(gun[player.getPlayerGun()].getMaxAmmo()),1, Assets.RED),((40),(20)))
         else:
-            Assets.WIN.blit(Assets.START_FONT.render("/" + str(gun[player.getPlayerGun()].getMaxAmmo()),1, Assets.RED),((55),(20)))
+            Assets.WIN.blit(Assets.START_FONT_BOLD_ITALIC.render("/" + str(gun[player.getPlayerGun()].getMaxAmmo()),1, Assets.RED),((55),(20)))
         #draws health bar  
         if gameConfig.getBoarderAroundHealth():
             pygame.draw.rect(Assets.WIN, Assets.WHITE, (Assets.WIDTH - player.getMaxhealth()//2 - 50 - 3,7, player.getMaxhealth()//2 + 6,26))

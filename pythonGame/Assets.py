@@ -1,10 +1,16 @@
-import pygame
+import pygame,pygame,Main
 pygame.mixer.init()
 pygame.font.init()
 clock = pygame.time.Clock()
+
+pygame.mixer.music.set_volume(Main.vol)
+
 run = True
-START_FONT = pygame.font.SysFont("Horror Poster Trajan Pro",40)
-START_FONT_SMALL = pygame.font.SysFont("Horror Poster Trajan Pro",20)
+START_FONT = pygame.font.SysFont("Horror Poster Trajan Pro", 40)
+START_FONT_ITALIC = pygame.font.SysFont("Horror Poster Trajan Pro", 40, italic=True)
+START_FONT_BOLD = pygame.font.SysFont("Horror Poster Trajan Pro", 40, bold=True)
+START_FONT_BOLD_ITALIC = pygame.font.SysFont("Horror Poster Trajan Pro", 40, bold=True, italic=True)
+START_FONT_SMALL = pygame.font.SysFont("Horror Poster Trajan Pro", 20)
 WIDTH, HEIGHT = 1200, 800
 CENTERX, CENTERY = WIDTH//2-50, HEIGHT//2-50
 WHITE = (255,255,255)
