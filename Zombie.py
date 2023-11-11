@@ -55,7 +55,7 @@ class Zombie:
                 break
             else:
                 if zombies[i].getZombieHealth() > 0:
-                    if 0 <= abs(tempArrY[0] - zombieLocationsY[i]) < 60 and 0 <= abs(tempArrX[0] - zombieLocationsX[i]) < 60:
+                    if 0 <= abs(tempArrY[0] - zombieLocationsY[i]) < 50 and 0 <= abs(tempArrX[0] - zombieLocationsX[i]) < 50:
                         self.canWalk = False
                     else:
                         self.canWalk = True

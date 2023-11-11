@@ -19,6 +19,7 @@ YELLOW = (255,255,0)
 BLACK = (0,0,0)
 GREY = (169,169,169)
 TARGETFPS = 120
+textcolor = WHITE
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 PLAYERW, PLAYERH = 75,75
 
