@@ -101,7 +101,7 @@ def start(maxRoundCount):
         HealthPool = 0
         mousex, mousey = pygame.mouse.get_pos()
         angle = math.degrees(math.atan2(Assets.CENTERX-mousex+20,Assets.CENTERY-mousey+20))-270
-        playersVariables(keysPressed,player,gun, zombies, objects, currentTickShooting, currentTickHeal, nowHealing, angle, bullets, mousex, mousey, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade)
+        playersVariables(keysPressed,player,gun, zombies, objects, currentTickHeal, nowHealing, angle, bullets, mousex, mousey, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade)
         
         if len(zombies) < maxZombieCount:
             zombies.append(Zombie.Zombie(i, 100, 100, False, 15, False, Assets.zombieSpriteIdel, randomZombiePosx(exclusion, -3060, 3060), randomZombiePosy(exclusion, -2020, 2020), Assets.PLAYERW-10, Assets.PLAYERH-10,zombieDamageToPlayerSounds,zombieHurtSounds, True, zombieVel, True))
