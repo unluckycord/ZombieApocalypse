@@ -1,4 +1,6 @@
 from random import choice
+
+import pygame
 class Zombie:
     def __init__(self,zombieCount,MAXHEALTH, zombieHealth, zombieTakingDamage, damageAmount, dealingDamage, sprite, zombiex, zombiey, zombiew, zombieh, randomZombieDamageSounds, randomZombieHurtSounds, canBeHit, Vel, canWalk):
         self.zombieCount = zombieCount
@@ -17,6 +19,9 @@ class Zombie:
         self.canBeHit = canBeHit
         self.Vel = Vel
         self.canWalk = canWalk
+        self.direction = pygame.math.Vector2()
+        self.velocity = pygame.math.Vector2()
+        self.postion = pygame.math.Vector2([self.zombiex, self.zombiey])
         
     def getZombieCount(self):
         return self.zombieCount
@@ -60,14 +65,19 @@ class Zombie:
                     else:
                         self.canWalk = True
         if self.canWalk: 
-            if self.zombiex >= player.getPlayerx():
-                self.zombiex -= self.Vel
-            if self.zombiex <= player.getPlayerx():
-                self.zombiex += self.Vel
-            if self.zombiey >= player.getPlayery():
-                self.zombiey -= self.Vel
-            if self.zombiey <= player.getPlayery():
-                self.zombiey += self.Vel
-    def zombieDamage(self, player):
+            playerVector = pygame.math.Vector2(player.getPlayerx(), player.getPlayery())
+            zombieVector = pygame.math.Vector2(self.zombiex, self.zombiey)
+            distance = (playerVector - zombieVector).magnitude()
+            
+            if distance > 0:
+                self.direction = (playerVector - zombieVector).normalize()
+            else:
+                self.direction = pygame.math.Vector2()
+
+            self.velocity = self.direction * self.Vel
+            self.zombiex += self.velocity.x
+            self.zombiey += self.velocity.y
+            
+    def zombieDamageToPlayer(self, player):
         if player.playerTakingDamage == True:
             player.playerHealth -= self.damageAmount

@@ -1,13 +1,12 @@
 from array import *
 from random import choice
 import pygame,PaintGame,Assets,Player,Zombie,random,math,Objects,Guns,GameConfig,Bullet,EndGame,time
-test = True
-def playersVariables(keysPressed, player, gun, zombies, objects, currentTickHeal, nowHealing, angle, bullets, mousex, mousey, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade):
+
+def playersVariables(keysPressed, player, gun, zombies, objects, currentTickShooting, currentTickHeal, nowHealing, angle, bullets, mousex, mousey, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade):
     #player.regenHealth()
-    mouseInput = pygame.mouse.get_pressed()
     currentSprite = gun[player.getPlayerGun()].getCurrentSprite()
     player.sprite = pygame.transform.rotate(currentSprite.copy(),angle)
-    player.playerMovement(keysPressed, zombies, objects, gun, currentTickHeal, nowHealing, bullets, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade)
+    currentTickShooting = player.playerMovement(keysPressed, zombies, objects, gun, currentTickShooting, currentTickHeal, nowHealing, bullets, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade, mousex,mousey)
 
 
 def roundCount(Round, maxRoundCount):
@@ -34,10 +33,9 @@ def start(maxRoundCount):
     shotgunVel = 2
     akVel = 9
     grenadeVel = 3
-    
     Round = 1
     prevTime = time.time()
-    dt = 0
+    deltaTime = 0
     gameConfig = GameConfig.GameConfig(False, True, True, True)
     clock = pygame.time.Clock()
     run = True
@@ -80,37 +78,37 @@ def start(maxRoundCount):
     angle = 0
     
     Assets.BACKGROUNDMAP1.play()
+
+    #game loop everything above is intialized once
     while run:
         keysPressed = pygame.key.get_pressed()
         currentTime = time.time()
-        dt = currentTime - prevTime
+        deltaTime = currentTime - prevTime
         prevTime = currentTime
-        
-        player.VEL = PlayerVel * dt * Assets.TARGETFPS
+        player.VEL = PlayerVel * deltaTime * Assets.TARGETFPS
         if gun[player.getPlayerGun()].gun == 0:
-            gun[player.getPlayerGun()].vel = pistolVel * dt * Assets.TARGETFPS
+            gun[player.getPlayerGun()].vel = pistolVel * deltaTime * Assets.TARGETFPS
         if gun[player.getPlayerGun()].gun == 1:
-            gun[player.getPlayerGun()].vel = shotgunVel * dt * Assets.TARGETFPS
+            gun[player.getPlayerGun()].vel = shotgunVel * deltaTime * Assets.TARGETFPS
         if gun[player.getPlayerGun()].gun == 2:
-            gun[player.getPlayerGun()].vel = akVel * dt * Assets.TARGETFPS
+            gun[player.getPlayerGun()].vel = akVel * deltaTime * Assets.TARGETFPS
         
         
         for i in range(len(grenades)):
-            grenades[i].grenadeVel = grenadeVel * dt * Assets.TARGETFPS
+            grenades[i].grenadeVel = grenadeVel * deltaTime * Assets.TARGETFPS
         
-        print(len(grenades))
         
         HealthPool = 0
         mousex, mousey = pygame.mouse.get_pos()
         angle = math.degrees(math.atan2(Assets.CENTERX-mousex+20,Assets.CENTERY-mousey+20))-270
-        playersVariables(keysPressed,player,gun, zombies, objects, currentTickHeal, nowHealing, angle, bullets, mousex, mousey, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade)
+        playersVariables(keysPressed,player,gun, zombies, objects, currentTickShooting, currentTickHeal, nowHealing, angle, bullets, mousex, mousey, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade)
         
         if len(zombies) < maxZombieCount:
             zombies.append(Zombie.Zombie(i, 100, 100, False, 15, False, Assets.zombieSpriteIdel, randomZombiePosx(exclusion, -3060, 3060), randomZombiePosy(exclusion, -2020, 2020), Assets.PLAYERW-10, Assets.PLAYERH-10,zombieDamageToPlayerSounds,zombieHurtSounds, True, zombieVel, True))
         for i in range(len(zombies)):
             zombieLocationsX.insert(i, round(zombies[i].getZombiex()))
             zombieLocationsY.insert(i, round(zombies[i].getZombiey()))
-            zombies[i].Vel = dt * Assets.TARGETFPS * zombieVel
+            zombies[i].Vel = deltaTime * Assets.TARGETFPS * zombieVel
             if zombies[i].getZombieHealth() > 0:
                 angleRelToPlayer = math.degrees(math.atan2(zombies[i].getZombiex() - player.getPlayerx(),zombies[i].getZombiey() - player.getPlayery()))-270
                 zombies[i].sprite = pygame.transform.rotate(Assets.zombieSpriteIdel.copy(), angleRelToPlayer)
@@ -124,39 +122,43 @@ def start(maxRoundCount):
                 if nowZombieDamage - currentTickZombieDamage >= random.randint(1000,10000) and zombies[i].canBeHit and abs(zombies[i].getZombiex() - player.getPlayerx()) < 100 and abs(zombies[i].getZombiey()-player.getPlayery()) < 100:
                     currentTickZombieDamage = nowZombieDamage
                     zombieDamageToPlayerSounds[random.randint(0,len(zombieDamageToPlayerSounds)-1)].play()
-                    zombies[i].zombieDamage(player)
+                    zombies[i].zombieDamageToPlayer(player)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                nowShooting = pygame.time.get_ticks()
-                #checks if player can shoot based on trigger pull
-                if nowShooting - currentTickShooting >= gun[player.getPlayerGun()].getCooldown():
-                    player.canShoot = True
-                else:
-                    player.canShoot = False
-                #checks if player can shoot based on reloading
-                if nowShooting - currentTickShooting >= gun[player.getPlayerGun()].getCooldownReloading():
-                    player.isReloading = False
-                #if checks pass, player can shoot
-                if player.canShoot and player.isReloading != True:
-                    nowBullet = pygame.time.get_ticks()
-                    currentTickShooting = nowShooting
-                    if gun[player.getPlayerGun()].currentAmmo > 0:
-                        if(player.getPlayerGun())==1:
-                            bullets.append(Bullet.Bullet(gun[player.getPlayerGun()],player.getPlayerx() + (player.getPlayerw()//2), player.getPlayery() + (player.getPlayerh()//2), gun[player.getPlayerGun()].getVel(), mousex, mousey,True, pygame.transform.rotate(Assets.playerSlug,angle)))
-                        else:
-                            bullets.append(Bullet.Bullet(gun[player.getPlayerGun()],player.getPlayerx() + (player.getPlayerw()//2), player.getPlayery() + (player.getPlayerh()//2), gun[player.getPlayerGun()].getVel(), mousex, mousey,True, Assets.playerBullet))
-                        gun[player.getPlayerGun()].getGunSound()
-                        gun[player.getPlayerGun()].currentSprite = gun[player.getPlayerGun()].getSpriteShooting()
-                        gun[player.getPlayerGun()].currentAmmo -= 1
-                    if player.getPlayerGun() == 1:
-                        Assets.SHOTGUNCOCK.play()
-                    else:
-                        Assets.EMPTYGUN.play()
+                
+        mouseInput = pygame.mouse.get_pressed()
+        if mouseInput == (1, 0, 0):
+            #checks if player can shoot based on trigger pull
+            nowShooting = pygame.time.get_ticks()
+            print(nowShooting, currentTickShooting)
+            if nowShooting - currentTickShooting >= gun[player.getPlayerGun()].getCooldown():
+                player.canShoot = True
             else:
-                gun[player.getPlayerGun()].currentSprite = gun[player.getPlayerGun()].getIdelSprite()
+                player.canShoot = False
+            #checks if player can shoot based on reloading
+            if nowShooting - currentTickShooting >= gun[player.getPlayerGun()].getCooldownReloading():
+                player.isReloading = False
+            #if checks pass, player can shoot
+            if player.canShoot and player.isReloading != True:
+                currentTickShooting = nowShooting
+                nowBullet = pygame.time.get_ticks()
+                if gun[player.getPlayerGun()].currentAmmo > 0:
+                    if(player.getPlayerGun())==1:
+                        bullets.append(Bullet.Bullet(gun[player.getPlayerGun()],player.getPlayerx() + (player.getPlayerw()//2), player.getPlayery() + (player.getPlayerh()//2), gun[player.getPlayerGun()].getVel(), mousex, mousey,True, pygame.transform.rotate(Assets.playerSlug, angleRelToPlayer)))
+                    else:
+                        bullets.append(Bullet.Bullet(gun[player.getPlayerGun()],player.getPlayerx() + (player.getPlayerw()//2), player.getPlayery() + (player.getPlayerh()//2), gun[player.getPlayerGun()].getVel(), mousex, mousey,True, Assets.playerBullet))
+                    gun[player.getPlayerGun()].getGunSound()
+                    gun[player.getPlayerGun()].currentSprite = gun[player.getPlayerGun()].getSpriteShooting()
+                    gun[player.getPlayerGun()].currentAmmo -= 1
+                if player.getPlayerGun() == 1:
+                    Assets.SHOTGUNCOCK.play()
+                else:
+                    Assets.EMPTYGUN.play()
+        else:
+            gun[player.getPlayerGun()].currentSprite = gun[player.getPlayerGun()].getIdelSprite()
+        
         #walking sounds based on ticks
         nowWalking = pygame.time.get_ticks()
         if nowWalking - currentTickWalking >= 500 and player.getIsWalking():

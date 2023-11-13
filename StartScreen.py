@@ -185,9 +185,9 @@ def startUI():
             Assets.WIN.blit(Assets.START_FONT_BOLD_ITALIC.render("FARM",1,Assets.textcolor), (widthOffset + widthOffset//2, 330))
             Assets.WIN.blit(Assets.level1, (widthOffset + widthOffset//2, heightOffset + heightOffset//4))
             if checkClick(nowClick, currentTickClick, event, level1start, mouseRect) and renderLevelSelection:
-                Assets.FADESFX.play()
-                Assets.MAINMENUTHEME.stop()
-                FadeEffect.paintFade()
+                #Assets.FADESFX.play()
+                #Assets.MAINMENUTHEME.stop()
+                #FadeEffect.paintFade()
                 Game.start(maxRoundCount)
         
         if renderLevelSelectionCampaign:
@@ -206,9 +206,9 @@ def startUI():
             Assets.WIN.blit(Assets.START_FONT_BOLD_ITALIC.render("FARM",1,Assets.textcolor), (widthOffset + widthOffset//2, 330))
             Assets.WIN.blit(Assets.level1, (widthOffset + widthOffset//2, heightOffset + heightOffset//4))
             if checkClick(nowClick, currentTickClick, event, level1start, mouseRect) and renderLevelSelectionCampaign:
-                Assets.FADESFX.play()
-                Assets.MAINMENUTHEME.stop()
-                FadeEffect.paintFade()
+                #Assets.FADESFX.play()
+                #Assets.MAINMENUTHEME.stop()
+                #FadeEffect.paintFade()
                 Game.start(maxRoundCount)
             
         pygame.display.update()

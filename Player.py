@@ -1,4 +1,4 @@
-import pygame, Grenade, Assets
+import pygame, Grenade, Assets, Bullet, Game
 class Player:
     def __init__(self,MAXHEALTH, playerHealth, playerTakingDamage, playerGun, isWalking, sprite ,playerx, playery, playerw , playerh, VEL, canShoot, isReloading, healablesOwned, isShooting, grenadeCount):
         self.MAXHEALTH = MAXHEALTH
@@ -50,8 +50,9 @@ class Player:
     def getIsShooting(self):
         return self.isShooting
     
-    def playerMovement(self,keysPressed, zombies, objects, gun, currentTickHeal, nowHealing, bullets, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade):
+    def playerMovement(self,keysPressed, zombies, objects, gun, currentTickShooting, currentTickHeal, nowHealing, bullets, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade, mousex,mousey):
         if self.playerHealth > 0:
+            
             if keysPressed[pygame.K_r] and gun[self.playerGun].currentAmmo != gun[self.playerGun].MAXAMMO:
                 self.isReloading = True
                 gun[self.playerGun].getGunReloading()
@@ -110,3 +111,5 @@ class Player:
                     zombies[i].zombiey += self.VEL
                 elif keysPressed[pygame.K_s]:
                     zombies[i].zombiey -= self.VEL
+        return currentTickShooting
+        
