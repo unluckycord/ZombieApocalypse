@@ -23,11 +23,10 @@ def start(maxRoundCount):
     clock = pygame.time.Clock()
     run = True
     player = Player.Player(1000, 1000, False, 0, False, Assets.playerSpriteIdelHandgun, Assets.CENTERX, Assets.CENTERY, Assets.PLAYERW, Assets.PLAYERH, PlayerVel, True, False, 2, False, 2)
-    zombieDamageToPlayerSounds = [Assets.ZOMBIEATTACK1,Assets.ZOMBIEATTACK2,Assets.ZOMBIEATTACK3,Assets.ZOMBIEATTACK4,Assets.ZOMBIEATTACK5,Assets.ZOMBIEATTACK6,Assets.ZOMBIEATTACK7,Assets.ZOMBIEATTACK8,Assets.ZOMBIEATTACK9]
     zombieHurtSounds = [Assets.ZOMBIEHURT1,Assets.ZOMBIEHURT2,Assets.ZOMBIEHURT3]
     
     Round = roundSystem.Round()
-    Round.NewRound(1,maxRoundCount, zombieVel,zombieDamageToPlayerSounds,zombieHurtSounds)
+    Round.NewRound(1,maxRoundCount, zombieVel,zombieHurtSounds)
     
     objects = []
     objects.append(Objects.Objects(0, Assets.CENTERX-1530, Assets.CENTERY - 1010, Assets.GROUND))
@@ -47,7 +46,6 @@ def start(maxRoundCount):
     angle = 0
     
     Assets.BACKGROUNDMAP1.play()
-    HealthPool = 0
     #game loop everything above is intialized once
     while run:
         keysPressed = pygame.key.get_pressed()
@@ -71,7 +69,7 @@ def start(maxRoundCount):
         angle = math.degrees(math.atan2(Assets.CENTERX-mousex+20,Assets.CENTERY-mousey+20))-270
         playersVariables(keysPressed,player,gun, Round.zombies, objects ,currentTickHeal, nowHealing, angle, bullets, mousex, mousey, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade)
         
-        Round.zombieCheck(player,deltaTime,zombieVel,zombieHurtSounds,zombieDamageToPlayerSounds,HealthPool,currentTickZombieDamage)
+        Round.zombieCheck(player,deltaTime,zombieVel,zombieHurtSounds,currentTickZombieDamage)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -119,13 +117,12 @@ def start(maxRoundCount):
         
         if player.getPlayerHealth() < 0:
             EndGame.endGameScreen(False)
-        print(HealthPool)
+        #print(Round.HealthPool)
         #FIX THIS IMMEDITLY
-        HealthPool = 100000
-        if HealthPool <= 0:
+        if Round.HealthPool <= 0:
             Round.zombies.clear()
             player.playerHealth = player.MAXHEALTH
-            HealthPool = Round.NewRound(Round.roundCount+1,maxRoundCount, zombieVel,zombieDamageToPlayerSounds,zombieHurtSounds)
+            HealthPool = Round.NewRound(Round.roundCount+1,maxRoundCount, zombieVel,zombieHurtSounds)
         #print(Round.zombieLocationsX ,Round.zombieLocationsY)
         PaintGame.drawWindow(player, Round.zombies, objects, gun, gameConfig, bullets, angle,zombieHurtSounds, currentTickZombieTakeDamage, nowZombieTakeDamage)
         pygame.display.update()
