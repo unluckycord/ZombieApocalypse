@@ -120,6 +120,7 @@ def start(maxRoundCount):
         if player.getPlayerHealth() < 0:
             EndGame.endGameScreen(False)
         print(HealthPool)
+        #FIX THIS IMMEDITLY
         HealthPool = 100000
         if HealthPool <= 0:
             Round.zombies.clear()
