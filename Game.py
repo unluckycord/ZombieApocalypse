@@ -1,30 +1,13 @@
 from array import *
 from random import choice
-import pygame,PaintGame,Assets,Player,Zombie,random,math,Objects,Guns,GameConfig,Bullet,EndGame,time
+import pygame,PaintGame,Assets,Player,Zombie,random,math,Objects,Guns,GameConfig,Bullet,EndGame,time,roundSystem
 
-def playersVariables(keysPressed, player, gun, zombies, objects, currentTickShooting, currentTickHeal, nowHealing, angle, bullets, mousex, mousey, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade):
+def playersVariables(keysPressed, player, gun, zombies, objects, currentTickHeal, nowHealing, angle, bullets, mousex, mousey, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade):
     #player.regenHealth()
     currentSprite = gun[player.getPlayerGun()].getCurrentSprite()
     player.sprite = pygame.transform.rotate(currentSprite.copy(),angle)
-    currentTickShooting = player.playerMovement(keysPressed, zombies, objects, gun, currentTickShooting, currentTickHeal, nowHealing, bullets, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade, mousex,mousey)
+    player.playerMovement(keysPressed, zombies, objects, gun, currentTickHeal, nowHealing, bullets, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade, mousex,mousey)
 
-
-def roundCount(Round, maxRoundCount):
-    if Round <= maxRoundCount:
-        if Round <= 10:
-            return random.randint(20,40)
-        elif 10 < Round <= 20:
-            return random.randint(40, 60)
-        else:
-            return random.randint(60,100)
-    else:
-        EndGame.endGameScreen(True)
-def randomZombiePosx(exclusion, rangeLower, rangeUpper):
-    return choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
-def randomZombiePosy(exclusion, rangeLower, rangeUpper):
-    return choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
-def roundTransition():
-    pass
 
 def start(maxRoundCount):
     PlayerVel = 3
@@ -40,25 +23,10 @@ def start(maxRoundCount):
     clock = pygame.time.Clock()
     run = True
     player = Player.Player(1000, 1000, False, 0, False, Assets.playerSpriteIdelHandgun, Assets.CENTERX, Assets.CENTERY, Assets.PLAYERW, Assets.PLAYERH, PlayerVel, True, False, 2, False, 2)
-    
-    exclusion = []
-    for i in range(500):
-        exclusion.append(i)
-    zombies = []
-    zombieLocationsX = []
-    zombieLocationsY = []
     zombieDamageToPlayerSounds = [Assets.ZOMBIEATTACK1,Assets.ZOMBIEATTACK2,Assets.ZOMBIEATTACK3,Assets.ZOMBIEATTACK4,Assets.ZOMBIEATTACK5,Assets.ZOMBIEATTACK6,Assets.ZOMBIEATTACK7,Assets.ZOMBIEATTACK8,Assets.ZOMBIEATTACK9]
     zombieHurtSounds = [Assets.ZOMBIEHURT1,Assets.ZOMBIEHURT2,Assets.ZOMBIEHURT3]
-    #upper limit is 200 zombies loaded on screen
-    #DO NOT EXCEED 200 ZOMBIES
-    maxZombieCount = 20
-    #maxZombieCount = roundCount(Round)
-    for i in range(maxZombieCount):
-        x = randomZombiePosx(exclusion, -3075, 3075)
-        y = randomZombiePosy(exclusion, -2020, 2020)
-        zombieLocationsX.append(x)
-        zombieLocationsY.append(y)
-        zombies.append(Zombie.Zombie(i, 100, 20, False, 15, False, Assets.zombieSpriteIdel, x, y, Assets.PLAYERW-10, Assets.PLAYERH-10,zombieDamageToPlayerSounds,zombieHurtSounds, True, zombieVel, True))
+    
+    Round = roundSystem.Round()
     
     objects = []
     objects.append(Objects.Objects(0, Assets.CENTERX-1530, Assets.CENTERY - 1010, Assets.GROUND))
@@ -78,7 +46,7 @@ def start(maxRoundCount):
     angle = 0
     
     Assets.BACKGROUNDMAP1.play()
-
+    HealthPool = 0
     #game loop everything above is intialized once
     while run:
         keysPressed = pygame.key.get_pressed()
@@ -98,31 +66,11 @@ def start(maxRoundCount):
             grenades[i].grenadeVel = grenadeVel * deltaTime * Assets.TARGETFPS
         
         
-        HealthPool = 0
         mousex, mousey = pygame.mouse.get_pos()
         angle = math.degrees(math.atan2(Assets.CENTERX-mousex+20,Assets.CENTERY-mousey+20))-270
-        playersVariables(keysPressed,player,gun, zombies, objects, currentTickHeal, nowHealing, angle, bullets, mousex, mousey, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade)
+        playersVariables(keysPressed,player,gun, Round.zombies, objects ,currentTickHeal, nowHealing, angle, bullets, mousex, mousey, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade)
         
-        if len(zombies) < maxZombieCount:
-            zombies.append(Zombie.Zombie(i, 100, 100, False, 15, False, Assets.zombieSpriteIdel, randomZombiePosx(exclusion, -3060, 3060), randomZombiePosy(exclusion, -2020, 2020), Assets.PLAYERW-10, Assets.PLAYERH-10,zombieDamageToPlayerSounds,zombieHurtSounds, True, zombieVel, True))
-        for i in range(len(zombies)):
-            zombieLocationsX.insert(i, round(zombies[i].getZombiex()))
-            zombieLocationsY.insert(i, round(zombies[i].getZombiey()))
-            zombies[i].Vel = deltaTime * Assets.TARGETFPS * zombieVel
-            if zombies[i].getZombieHealth() > 0:
-                angleRelToPlayer = math.degrees(math.atan2(zombies[i].getZombiex() - player.getPlayerx(),zombies[i].getZombiey() - player.getPlayery()))-270
-                zombies[i].sprite = pygame.transform.rotate(Assets.zombieSpriteIdel.copy(), angleRelToPlayer)
-                zombies[i].zombieMovement(player, zombieLocationsX, zombieLocationsY, zombies)
-                HealthPool += zombies[i].getZombieHealth()
-                nowZombieTakeDamage = pygame.time.get_ticks()
-                if zombies[i].zombieTakingDamage and nowZombieTakeDamage - currentTickZombieTakeDamage >= 2000:
-                    currentTickZombieTakeDamage = nowZombieTakeDamage
-                    zombieHurtSounds[random.randint(0, 2)].play()
-                nowZombieDamage = pygame.time.get_ticks()
-                if nowZombieDamage - currentTickZombieDamage >= random.randint(1000,10000) and zombies[i].canBeHit and abs(zombies[i].getZombiex() - player.getPlayerx()) < 100 and abs(zombies[i].getZombiey()-player.getPlayery()) < 100:
-                    currentTickZombieDamage = nowZombieDamage
-                    zombieDamageToPlayerSounds[random.randint(0,len(zombieDamageToPlayerSounds)-1)].play()
-                    zombies[i].zombieDamageToPlayer(player)
+        #Round.zombieCheck(player,deltaTime,zombieVel,zombieHurtSounds,zombieDamageToPlayerSounds,HealthPool,currentTickZombieDamage)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -171,13 +119,11 @@ def start(maxRoundCount):
         if player.getPlayerHealth() < 0:
             EndGame.endGameScreen(False)
         if HealthPool <= 0:
-            
-            zombies.clear()
-            Round += 1
-            roundCount(Round, maxRoundCount)
+            Round.zombies.clear()
+            Round.NewRound(Round.roundCount+1,maxRoundCount, zombieVel,zombieDamageToPlayerSounds,zombieHurtSounds)
             player.playerHealth = player.MAXHEALTH
                 
-        PaintGame.drawWindow(player, zombies, objects, gun, gameConfig, bullets, angle,zombieHurtSounds, currentTickZombieTakeDamage, nowZombieTakeDamage)
+        PaintGame.drawWindow(player, Round.zombies, objects, gun, gameConfig, bullets, angle,zombieHurtSounds, currentTickZombieTakeDamage, nowZombieTakeDamage)
         pygame.display.update()
         
     pygame.quit()

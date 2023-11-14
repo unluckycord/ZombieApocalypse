@@ -81,3 +81,4 @@ class Zombie:
     def zombieDamageToPlayer(self, player):
         if player.playerTakingDamage == True:
             player.playerHealth -= self.damageAmount
+    
