@@ -4,21 +4,23 @@ import random
 
 import pygame, Assets
 class Zombie:
-    def __init__(self,zombieCount, zombieTakingDamage, dealingDamage, canBeHit, Vel, canWalk, x , y):
+    def __init__(self,zombieCount, dealingDamage, Vel, x , y):
         self.zombieCount = zombieCount
         self.MAXHEALTH = 100
         self.zombieHealth = 100
-        self.zombieTakingDamage = zombieTakingDamage
+        self.zombieTakingDamage = False
         self.damageAmount = 15
-        self.dealingDamage = dealingDamage
+        self.dealingDamage = True
         self.zombieDamageToPlayerSounds = [Assets.ZOMBIEATTACK1,Assets.ZOMBIEATTACK2,Assets.ZOMBIEATTACK3,Assets.ZOMBIEATTACK4,Assets.ZOMBIEATTACK5,Assets.ZOMBIEATTACK6,Assets.ZOMBIEATTACK7,Assets.ZOMBIEATTACK8,Assets.ZOMBIEATTACK9]
         self.zombieHurtSounds = [Assets.ZOMBIEHURT1,Assets.ZOMBIEHURT2,Assets.ZOMBIEHURT3]
-        self.sprite = Assets.zombieSpriteIdel
+        self.sprite = Assets.zombieSpriteCorpse
         self.zombieX = x
         self.zombieY = y
         self.zombiew = Assets.PLAYERW-10
         self.zombieh = Assets.PLAYERH-10
-        self.canBeHit = canBeHit
+        self.zombieHitBox = pygame.draw.rect(Assets.WIN, Assets.WHITE, (self.zombieX, self.zombieY, self.zombieh, self.zombiew))
+        self.zombieAttackHitBox = pygame.draw.rect(Assets.WIN, Assets.BLACK, (self.zombieX, self.zombieY, self.zombieh/2, self.zombiew/2)).clamp(self.zombieHitBox)
+        self.canBeHit = True
         self.canWalk = True
         self.isAlive = True
         self.Vel = Vel
@@ -39,6 +41,8 @@ class Zombie:
     def getDealingDamage(self):
         return self.dealingDamage
     def getSprite(self):
+        if self.isAlive:
+            self.sprite = Assets.zombieSpriteIdel
         return self.sprite
     def getZombiex(self):
         return self.zombieX

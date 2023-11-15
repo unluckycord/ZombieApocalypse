@@ -46,7 +46,7 @@ class Round():
         for i in range(self.maxZombieCount):
             x = self.zombieX = choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
             y = self.zombieY = choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
-            self.zombies.append(Zombie.Zombie(i, False, False, True, zombieVel, True, x, y ))
+            self.zombies.append(Zombie.Zombie(i, True, zombieVel, x, y ))
         for i in range(self.maxZombieCount):
             self.HealthPool = 1 
             #self.HealthPool = sum(self.zombies[i].getZombieHealth())

@@ -1,23 +1,26 @@
 import pygame, Grenade, Assets, Bullet, Game
 class Player:
-    def __init__(self,MAXHEALTH, playerHealth, playerTakingDamage, playerGun, isWalking, sprite ,playerx, playery, playerw , playerh, VEL, canShoot, isReloading, healablesOwned, isShooting, grenadeCount):
-        self.MAXHEALTH = MAXHEALTH
-        self.playerHealth = playerHealth
-        self.playerTakingDamage = playerTakingDamage
+    def __init__(self, VEL, healablesOwned, grenadeCount):
+        self.MAXHEALTH = 1000
+        self.playerHealth = 1000
+        self.isAlive = True
+        self.playerTakingDamage = False
         #its a number instead, 0 is handgun, 1 is shotgun and 2 is AK
-        self.playerGun = playerGun
-        self.isWalking = isWalking
-        self.sprite = sprite
-        self.playerx = playerx
-        self.playery = playery
-        self.playerw = playerw
-        self.playerh = playerh
+        self.playerGun = 0
+        self.isWalking = False
+        self.sprite = Assets.playerSpriteIdelHandgun
+        self.playerx = Assets.CENTERX
+        self.playery = Assets.CENTERY
+        self.playerw = Assets.PLAYERW
+        self.playerh = Assets.PLAYERH
         self.VEL = VEL
-        self.canShoot = canShoot
-        self.isReloading = isReloading
+        self.canShoot = True
+        self.isReloading = False
         self.healablesOwned = healablesOwned
-        self.isShooting = isShooting
+        self.isShooting = False
         self.grenadeCount = grenadeCount
+        self.walkingSound = Assets.WALKINGCONCRETE
+        self.playerHitBox = pygame.draw.rect(Assets.WIN, Assets.BLACK, (self.getPlayerx(), self.getPlayery(), self.getPlayerh(), self.getPlayerw()))
 
     def getMaxhealth(self):
         return self.MAXHEALTH
@@ -47,10 +50,21 @@ class Player:
         return self.isReloading
     def getHealablesOwned(self):
         return self.healablesOwned
+    def getGrenadeCount(self):
+        return self.grenadeCount
     def getIsShooting(self):
         return self.isShooting
     
-    def playerMovement(self,keysPressed, zombies, objects, gun, currentTickHeal, nowHealing, bullets, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade, mousex,mousey):
+    def playerMovementSound(self, currentTickWalking):
+        #walking sounds based on ticks
+        nowWalking = pygame.time.get_ticks()
+        if nowWalking - currentTickWalking >= 500 and self.getIsWalking():
+            currentTickWalking = nowWalking
+            self.walkingSound.play()
+        elif self.isWalking == False:
+            self.walkingSound.stop()
+    
+    def playerMovement(self,keysPressed, zombies, objects, gun, currentTickHeal, nowHealing, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade, mousex,mousey):
         if self.playerHealth > 0:
             
             if keysPressed[pygame.K_r] and gun[self.playerGun].currentAmmo != gun[self.playerGun].MAXAMMO:
@@ -84,15 +98,16 @@ class Player:
                 self.isWalking = True
             else:
                 self.isWalking = False
-            for i in range(len(bullets)):
-                if keysPressed[pygame.K_a]:
-                    bullets[i].bulletx += self.VEL
-                elif keysPressed[pygame.K_d]:
-                    bullets[i].bulletx -= self.VEL
-                if keysPressed[pygame.K_w]:
-                    bullets[i].bullety += self.VEL
-                elif keysPressed[pygame.K_s]:
-                    bullets[i].bullety -= self.VEL
+
+            #for i in range(len(bullets)):
+            #    if keysPressed[pygame.K_a]:
+            #        bullets[i].bulletx += self.VEL
+            #    elif keysPressed[pygame.K_d]:
+            #        bullets[i].bulletx -= self.VEL
+            #    if keysPressed[pygame.K_w]:
+            #        bullets[i].bullety += self.VEL
+            #    elif keysPressed[pygame.K_s]:
+            #        bullets[i].bullety -= self.VEL
             for i in range(len(objects)):
                 if keysPressed[pygame.K_a]:
                     objects[i].posx += self.VEL

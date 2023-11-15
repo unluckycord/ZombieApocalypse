@@ -36,6 +36,8 @@ playerSpriteIdelShotgun = pygame.transform.scale(pygame.image.load(
 playerSpriteIdelHandgun = pygame.transform.scale(pygame.image.load(
     "Assets/sprites/playerSprites/handgun/idle/playerIdelHandgun.png"), (PLAYERW, PLAYERH))
 playerHealthSprite = pygame.transform.scale(pygame.image.load("Assets/sprites/playerSprites/heart.png"), (70,70))
+playerStimPackSprite = pygame.transform.rotate(pygame.transform.scale(pygame.image.load("Assets/sprites/playerSprites/stimpackUI.png"), (680*(1/20),1190*(1/20))), 45)
+playerGrenade = pygame.transform.scale(pygame.image.load("Assets/sprites/playerSprites/grenade.png"), (60,60))
 
 playerSpriteAK47Muzzle = pygame.transform.scale(pygame.image.load(
     "Assets/sprites/playerSprites/rifle/shoot/playerShootingAK47.png"), (PLAYERW, PLAYERH))
