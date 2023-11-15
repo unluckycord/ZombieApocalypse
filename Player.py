@@ -18,7 +18,7 @@ class Player:
         self.healablesOwned = healablesOwned
         self.isShooting = isShooting
         self.grenadeCount = grenadeCount
-    
+
     def getMaxhealth(self):
         return self.MAXHEALTH
     def getPlayerHealth(self):

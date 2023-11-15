@@ -11,9 +11,6 @@ class Round():
         self.roundCount = 0
         self.maxEnemyCount = 0
         self.zombies = []
-        self.exclusion = []
-        self.zombieLocationsX = []
-        self.zombieLocationsY = []
         
     def increaseRoundCount(self, Round, maxRoundCount):
         if Round <= maxRoundCount:
@@ -26,17 +23,27 @@ class Round():
         else:
             EndGame.endGameScreen(True)
 
+    def setZombieSpawn(self, exclusion, rangeLower, rangeUpper):
+        self.zombieX = choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
+        self.zombieY = choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
+
     def NewRound(self, round,maxRoundCount, zombieVel):
         self.roundCount = round
-        for i in range(500):
-            self.exclusion.append(i)
         #upper limit is 200 zombies loaded on screen
         #DO NOT EXCEED 200 ZOMBIES
-        self.maxEnemyCount = 20
+        #opptiomization is needed to retest this above note
+        
+        #safe gaurd
+        self.maxZombieCount = 20
         #self.maxZombieCount = self.increaseRoundCount(round, maxRoundCount)
+
+        exclusion = []
+        for i in range(500):
+            exclusion.insert(0, -i)
+            exclusion.append(i)
+        rangeLower = -1000
+        rangeUpper = 1000
         for i in range(self.maxEnemyCount):
-            x = self.randomZombiePosx(self.exclusion, -3075, 3075)
-            y = self.randomZombiePosy(self.exclusion, -2020, 2020)
-            self.zombieLocationsX.append(x)
-            self.zombieLocationsY.append(y)
-            self.zombies.append(Zombie.Zombie(i, False, False, True, zombieVel, True))
+            x = self.zombieX = choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
+            y = self.zombieY = choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
+            self.zombies.append(Zombie.Zombie(i, False, False, True, zombieVel, True, 0, 0 ))

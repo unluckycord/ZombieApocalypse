@@ -9,6 +9,8 @@ def playersVariables(keysPressed, player, gun, zombies, objects, currentTickHeal
     player.playerMovement(keysPressed, zombies, objects, gun, currentTickHeal, nowHealing, bullets, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade, mousex,mousey)
 
 
+
+
 def start(maxRoundCount):
     PlayerVel = 3
     zombieVel = 1
@@ -26,16 +28,17 @@ def start(maxRoundCount):
     zombieHurtSounds = [Assets.ZOMBIEHURT1,Assets.ZOMBIEHURT2,Assets.ZOMBIEHURT3]
     
     Round = roundSystem.Round()
-    Round.NewRound(1,maxRoundCount, zombieVel,zombieHurtSounds)
+    Round.NewRound(1,maxRoundCount, zombieVel)
     
     objects = []
     objects.append(Objects.Objects(0, Assets.CENTERX-1530, Assets.CENTERY - 1010, Assets.GROUND))
     #objects.append(Objects.Objects(1, Assets.CENTERX, Assets.CENTERY,Assets.BUILDING))
     
-    gun = []
-    gun.append(Guns.Guns(Assets.playerSpriteIdelHandgun, Assets.playerSpriteHandgunMuzzle, Assets.playerSpriteIdelHandgun, 0, Assets.HANDGUNSOUNDEFFECT, Assets.RELOADHANDGUN, 10, 10, 300, 1900, pistolVel, 5))
-    gun.append(Guns.Guns(Assets.playerSpriteIdelShotgun, Assets.playerSpriteShotgunMuzzle, Assets.playerSpriteIdelShotgun, 1, Assets.SHOTGUNSOUNDEFFECT, Assets.RELOADSHOTGUN, 8 , 8, 600, 3300, shotgunVel, 40))
-    gun.append(Guns.Guns(Assets.playerSpriteIdelAK47, Assets.playerSpriteAK47Muzzle, Assets.playerSpriteIdelAK47, 2, Assets.AK47SOUNDEFFECT, Assets.RELOADAK47, 30, 30, 100, 2300, akVel, 20))
+    Pistol = Guns.Guns(Assets.playerSpriteIdelHandgun, Assets.playerSpriteHandgunMuzzle, Assets.playerSpriteIdelHandgun, 0, Assets.HANDGUNSOUNDEFFECT, Assets.RELOADHANDGUN, 10, 10, 300, 1900, pistolVel, 5)
+    AK47 = Guns.Guns(Assets.playerSpriteIdelShotgun, Assets.playerSpriteShotgunMuzzle, Assets.playerSpriteIdelShotgun, 1, Assets.SHOTGUNSOUNDEFFECT, Assets.RELOADSHOTGUN, 8 , 8, 600, 3300, shotgunVel, 40)
+    Shotgun = Guns.Guns(Assets.playerSpriteIdelAK47, Assets.playerSpriteAK47Muzzle, Assets.playerSpriteIdelAK47, 2, Assets.AK47SOUNDEFFECT, Assets.RELOADAK47, 30, 30, 100, 2300, akVel, 20)
+    gun = [Pistol, AK47, Shotgun]
+    
     bullets = []
     worldDistanceX, worldDistanceY = 0,0
     grenades = []
@@ -69,7 +72,6 @@ def start(maxRoundCount):
         angle = math.degrees(math.atan2(Assets.CENTERX-mousex+20,Assets.CENTERY-mousey+20))-270
         playersVariables(keysPressed,player,gun, Round.zombies, objects ,currentTickHeal, nowHealing, angle, bullets, mousex, mousey, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade)
         
-        Round.zombieCheck(player,deltaTime,zombieVel,zombieHurtSounds,currentTickZombieDamage)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -122,8 +124,7 @@ def start(maxRoundCount):
         if Round.HealthPool <= 0:
             Round.zombies.clear()
             player.playerHealth = player.MAXHEALTH
-            HealthPool = Round.NewRound(Round.roundCount+1,maxRoundCount, zombieVel,zombieHurtSounds)
-        #print(Round.zombieLocationsX ,Round.zombieLocationsY)
+            HealthPool = Round.NewRound(Round.roundCount+1,maxRoundCount, zombieVel)
         PaintGame.drawWindow(player, Round.zombies, objects, gun, gameConfig, bullets, angle,zombieHurtSounds, currentTickZombieTakeDamage, nowZombieTakeDamage)
         pygame.display.update()
         

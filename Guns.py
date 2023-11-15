@@ -53,3 +53,11 @@ class Guns:
                 return self.gunDamage * 0.00001
         else:
             return self.gunDamage 
+        
+    def gunVelCheck(gun, player):
+        if gun[player.getPlayerGun()].gun == 0:
+            gun[player.getPlayerGun()].vel = pistolVel * deltaTime * Assets.TARGETFPS
+        if gun[player.getPlayerGun()].gun == 1:
+            gun[player.getPlayerGun()].vel = shotgunVel * deltaTime * Assets.TARGETFPS
+        if gun[player.getPlayerGun()].gun == 2:
+            gun[player.getPlayerGun()].vel = akVel * deltaTime * Assets.TARGETFPS
