@@ -1,6 +1,6 @@
 from array import *
-from random import choice
-import pygame,PaintGame,Assets,Player,Zombie,random,math,Objects,Guns,GameConfig,Bullet,EndGame,time,roundSystem
+from random import choice, randint
+import pygame,PaintGame,Assets,Player,math,Objects,Guns,GameConfig,Bullet,EndGame,time,roundSystem
 
 def playersVariables(keysPressed, player, gun, zombies, objects, currentTickHeal, nowHealing, angle, bullets, mousex, mousey, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade):
     #player.regenHealth()
@@ -56,22 +56,15 @@ def start(maxRoundCount):
         deltaTime = currentTime - prevTime
         prevTime = currentTime
         player.VEL = PlayerVel * deltaTime * Assets.TARGETFPS
-        if gun[player.getPlayerGun()].gun == 0:
-            gun[player.getPlayerGun()].vel = pistolVel * deltaTime * Assets.TARGETFPS
-        if gun[player.getPlayerGun()].gun == 1:
-            gun[player.getPlayerGun()].vel = shotgunVel * deltaTime * Assets.TARGETFPS
-        if gun[player.getPlayerGun()].gun == 2:
-            gun[player.getPlayerGun()].vel = akVel * deltaTime * Assets.TARGETFPS
-        
-        
+
         for i in range(len(grenades)):
             grenades[i].grenadeVel = grenadeVel * deltaTime * Assets.TARGETFPS
         
-        
+        f = gun[player.getPlayerGun()].getVel(pistolVel,deltaTime)
         mousex, mousey = pygame.mouse.get_pos()
         angle = math.degrees(math.atan2(Assets.CENTERX-mousex+20,Assets.CENTERY-mousey+20))-270
         playersVariables(keysPressed,player,gun, Round.zombies, objects ,currentTickHeal, nowHealing, angle, bullets, mousex, mousey, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade)
-        
+        Round.roundCheck(player,maxRoundCount,zombieVel,deltaTime,currentTickZombieDamage)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -81,7 +74,6 @@ def start(maxRoundCount):
         if mouseInput == (1, 0, 0):
             #checks if player can shoot based on trigger pull
             nowShooting = pygame.time.get_ticks()
-            print(nowShooting, currentTickShooting)
             if nowShooting - currentTickShooting >= gun[player.getPlayerGun()].getCooldown():
                 player.canShoot = True
             else:
@@ -95,9 +87,9 @@ def start(maxRoundCount):
                 nowBullet = pygame.time.get_ticks()
                 if gun[player.getPlayerGun()].currentAmmo > 0:
                     if(player.getPlayerGun())==1:
-                        bullets.append(Bullet.Bullet(gun[player.getPlayerGun()],player.getPlayerx() + (player.getPlayerw()//2), player.getPlayery() + (player.getPlayerh()//2), gun[player.getPlayerGun()].getVel(), mousex, mousey,True, pygame.transform.rotate(Assets.playerSlug, angleRelToPlayer)))
+                        bullets.append(Bullet.Bullet(gun[player.getPlayerGun()],player.getPlayerx() + (player.getPlayerw()//2), player.getPlayery() + (player.getPlayerh()//2), gun[player.getPlayerGun()].getVel(shotgunVel,deltaTime), mousex, mousey,True, pygame.transform.rotate(Assets.playerSlug, randint(0, 360))))
                     else:
-                        bullets.append(Bullet.Bullet(gun[player.getPlayerGun()],player.getPlayerx() + (player.getPlayerw()//2), player.getPlayery() + (player.getPlayerh()//2), gun[player.getPlayerGun()].getVel(), mousex, mousey,True, Assets.playerBullet))
+                        bullets.append(Bullet.Bullet(gun[player.getPlayerGun()],player.getPlayerx() + (player.getPlayerw()//2), player.getPlayery() + (player.getPlayerh()//2), gun[player.getPlayerGun()].getVel(pistolVel,deltaTime), mousex, mousey,True, pygame.transform.rotate(Assets.playerBullet, randint(0, 360))))
                     gun[player.getPlayerGun()].getGunSound()
                     gun[player.getPlayerGun()].currentSprite = gun[player.getPlayerGun()].getSpriteShooting()
                     gun[player.getPlayerGun()].currentAmmo -= 1
@@ -119,12 +111,7 @@ def start(maxRoundCount):
         
         if player.getPlayerHealth() < 0:
             EndGame.endGameScreen(False)
-        #print(Round.HealthPool)
         #FIX THIS IMMEDITLY
-        if Round.HealthPool <= 0:
-            Round.zombies.clear()
-            player.playerHealth = player.MAXHEALTH
-            HealthPool = Round.NewRound(Round.roundCount+1,maxRoundCount, zombieVel)
         PaintGame.drawWindow(player, Round.zombies, objects, gun, gameConfig, bullets, angle,zombieHurtSounds, currentTickZombieTakeDamage, nowZombieTakeDamage)
         pygame.display.update()
         

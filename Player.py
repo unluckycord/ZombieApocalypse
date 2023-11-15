@@ -104,11 +104,11 @@ class Player:
                     objects[i].posy -= self.VEL
             for i in range(len(zombies)):
                 if keysPressed[pygame.K_a]:
-                    zombies[i].zombiex += self.VEL
+                    zombies[i].zombieX += self.VEL
                 elif keysPressed[pygame.K_d]:
-                    zombies[i].zombiex -= self.VEL
+                    zombies[i].zombieX -= self.VEL
                 if keysPressed[pygame.K_w]:
-                    zombies[i].zombiey += self.VEL
+                    zombies[i].zombieY += self.VEL
                 elif keysPressed[pygame.K_s]:
-                    zombies[i].zombiey -= self.VEL
+                    zombies[i].zombieY -= self.VEL
         

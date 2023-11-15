@@ -19,12 +19,12 @@ class Zombie:
         self.zombiew = Assets.PLAYERW-10
         self.zombieh = Assets.PLAYERH-10
         self.canBeHit = canBeHit
+        self.canWalk = True
         self.isAlive = True
         self.Vel = Vel
-        self.canWalk = canWalk
         self.direction = pygame.math.Vector2()
         self.velocity = pygame.math.Vector2()
-        self.postion = pygame.math.Vector2([self.zombieLocation[0], self.zombieLocation[1]])
+        self.postion = pygame.math.Vector2([self.zombieX, self.zombieY])
         
     def getZombieCount(self):
         return self.zombieCount
@@ -41,11 +41,9 @@ class Zombie:
     def getSprite(self):
         return self.sprite
     def getZombiex(self):
-        return self.zombieLocation[0]
+        return self.zombieX
     def getZombiey(self):
-        return self.zombieLocation[1]
-    def getZombieLocation(self):
-        return self.zombieLocation
+        return self.zombieY
     def getZombiew(self):
         return self.zombiew
     def getZombieh(self):
@@ -62,7 +60,7 @@ class Zombie:
     def randomZombiePosy(self, exclusion, rangeLower, rangeUpper):
         return choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
     
-    def zombieMovement(self, player, zombieLocationsX, zombieLocationsY, zombies):
+    def zombieMovement(self, player):
         #tempArrX = [round(self.getZombiex())]
         #tempArrY = [round(self.getZombiey())]
         #for i in range(len(zombies)):
@@ -75,44 +73,47 @@ class Zombie:
                 #        self.canWalk = False
                 #    else:
                 #        self.canWalk = True
-        if self.canWalk: 
-            playerVector = pygame.math.Vector2(player.getPlayerx(), player.getPlayery())
-            zombieVector = pygame.math.Vector2(self.zombiex, self.zombiey)
-            distance = (playerVector - zombieVector).magnitude()
-            
-            if distance > 0:
-                self.direction = (playerVector - zombieVector).normalize()
-            else:
-                self.direction = pygame.math.Vector2()
+        playerVector = pygame.math.Vector2(player.getPlayerx(), player.getPlayery())
+        zombieVector = pygame.math.Vector2(self.zombieX, self.zombieY)
+        distance = (playerVector - zombieVector).magnitude()
+        
+        if distance > 0:
+            self.direction = (playerVector - zombieVector).normalize()
+        else:
+            self.direction = pygame.math.Vector2()
 
-            self.velocity = self.direction * self.Vel
-            self.zombiex += self.velocity.x
-            self.zombiey += self.velocity.y
+        self.velocity = self.direction * self.Vel
+        self.zombieX += self.velocity.x
+        self.zombieY += self.velocity.y
             
     def zombieDamageToPlayer(self, player):
         if player.playerTakingDamage == True:
             player.playerHealth -= self.damageAmount
 
-    def randomZombieAttackSound(self, i, player):
+    def randomZombieTakingDamageSound(self):
+        self.zombieDamageToPlayerSounds[random.randint(0,len(self.zombieDamageToPlayerSounds)-1)].play()
+
+    def randomZombieAttackSound(self,player,currentTickZombieDamage):
         nowZombieDamage = pygame.time.get_ticks()
-        if nowZombieDamage - currentTickZombieDamage >= random.randint(1000,10000) and self.zombies[i].canBeHit and abs(self.zombies[i].getZombiex() - player.getPlayerx()) < 100 and abs(self.zombies[i].getZombiey()-player.getPlayery()) < 100:
+        if nowZombieDamage - currentTickZombieDamage >= random.randint(1000,10000) and self.canBeHit and abs(self.getZombiex() - player.getPlayerx()) < 100 and abs(self.getZombiey()-player.getPlayery()) < 100:
             currentTickZombieDamage = nowZombieDamage
-            self.zombieDamageToPlayerSounds[random.randint(0,len(self.zombieDamageToPlayerSounds)-1)].play()
-            self.zombies[i].zombieDamageToPlayer(player)
+            self.randomZombieAttackSound
+            self.zombieDamageToPlayer(player)
 
-    def randomZombieTakingDamageSound():
-        pass
+    def rotateZombie(self, player):
+        angleRelToPlayer = math.degrees(math.atan2(self.getZombiex() - player.getPlayerx(),self.getZombiey() - player.getPlayery()))-270
+        self.sprite = pygame.transform.rotate(Assets.zombieSpriteIdel.copy(), angleRelToPlayer)
 
-    def rotateZombie(self, i, player):
-        angleRelToPlayer = math.degrees(math.atan2(self.zombies[i].getZombiex() - player.getPlayerx(),self.zombies[i].getZombiey() - player.getPlayery()))-270
-        self.zombies[i].sprite = pygame.transform.rotate(Assets.zombieSpriteIdel.copy(), angleRelToPlayer)
+    def zombieDeathCheck(self):
+        if self.getZombieHealth == 0:
+            self.isAlive = False
 
-    def zombieBrain(self,player,deltaTime,zombieVel,zombieHurtSounds,zombieDamageToPlayerSounds,currentTickZombieDamage):
-        for i in range(len(self.zombies)):
-            self.zombies[i].Vel = deltaTime * Assets.TARGETFPS * zombieVel
-            if self.zombies[i].isAlive:
-                self.rotateZombie(i)
-                self.zombies[i].zombieMovement(player, self.zombieLocationsX, self.zombieLocationsY, self.zombies)
-                self.HealthPool = math.sum(self.zombies[i].getZombieHealth())
-                self.randomZombieAttackSound(i, player)
+    def zombieBrain(self,player,deltaTime,zombieVel,currentTickZombieDamage):
+            self.Vel = deltaTime * Assets.TARGETFPS * zombieVel
+            if self.isAlive:
+                self.zombieMovement(player)
+                self.rotateZombie(player)
+                self.zombieMovement(player)
+                self.randomZombieAttackSound(player,currentTickZombieDamage)
+                self.zombieDeathCheck()
     

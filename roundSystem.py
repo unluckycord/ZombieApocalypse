@@ -9,7 +9,7 @@ class Round():
     def __init__(self):
         self.HealthPool = 0
         self.roundCount = 0
-        self.maxEnemyCount = 0
+        #self.maxEnemyCount = 0
         self.zombies = []
         
     def increaseRoundCount(self, Round, maxRoundCount):
@@ -34,7 +34,7 @@ class Round():
         #opptiomization is needed to retest this above note
         
         #safe gaurd
-        self.maxZombieCount = 20
+        self.maxZombieCount = 5
         #self.maxZombieCount = self.increaseRoundCount(round, maxRoundCount)
 
         exclusion = []
@@ -43,7 +43,20 @@ class Round():
             exclusion.append(i)
         rangeLower = -1000
         rangeUpper = 1000
-        for i in range(self.maxEnemyCount):
+        for i in range(self.maxZombieCount):
             x = self.zombieX = choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
             y = self.zombieY = choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
-            self.zombies.append(Zombie.Zombie(i, False, False, True, zombieVel, True, 0, 0 ))
+            self.zombies.append(Zombie.Zombie(i, False, False, True, zombieVel, True, x, y ))
+        for i in range(self.maxZombieCount):
+            self.HealthPool = 1 
+            #self.HealthPool = sum(self.zombies[i].getZombieHealth())
+        
+    def roundCheck(self, player,maxRoundCount,zombieVel,deltaTime,currentTickZombieDamage):
+        if self.HealthPool <= 0:
+            self.zombies.clear()
+            player.playerHealth = player.MAXHEALTH
+            self.NewRound(self.roundCount+1,maxRoundCount, zombieVel)
+        else:
+            for i in range(len(self.zombies)):
+                self.zombies[i].zombieBrain(player,deltaTime,zombieVel,currentTickZombieDamage)
+

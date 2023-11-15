@@ -1,3 +1,5 @@
+import Assets
+
 class Guns:
     def __init__(self, currentSprite, spriteShooting, idelSprite, gun, gunSound, gunReloading, MAXAMMO, currentAmmo, cooldown, cooldownReloading, vel, gunDamage):
         self.currentSprite = currentSprite
@@ -33,7 +35,8 @@ class Guns:
         return self.cooldown
     def getCooldownReloading(self):
         return self.cooldownReloading
-    def getVel(self):
+    def getVel(self,gunVel,deltaTime):
+        self.vel = gunVel * deltaTime * Assets.TARGETFPS
         return self.vel
     def getGunDamage(self, playerx, playery, zombiex, zombiey):
         if self.gun ==1:
@@ -53,11 +56,4 @@ class Guns:
                 return self.gunDamage * 0.00001
         else:
             return self.gunDamage 
-        
-    def gunVelCheck(gun, player):
-        if gun[player.getPlayerGun()].gun == 0:
-            gun[player.getPlayerGun()].vel = pistolVel * deltaTime * Assets.TARGETFPS
-        if gun[player.getPlayerGun()].gun == 1:
-            gun[player.getPlayerGun()].vel = shotgunVel * deltaTime * Assets.TARGETFPS
-        if gun[player.getPlayerGun()].gun == 2:
-            gun[player.getPlayerGun()].vel = akVel * deltaTime * Assets.TARGETFPS
+    
