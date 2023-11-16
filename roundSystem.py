@@ -48,7 +48,8 @@ class Round():
             y = self.zombieY = choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
             self.zombies.append(Zombie.Zombie(i, True, zombieVel, x, y ))
         for i in range(self.maxZombieCount):
-            self.HealthPool = 1 
+            self.HealthPool = 1
+            print(self.zombies) 
             #self.HealthPool = sum(self.zombies[i].getZombieHealth())
         
     def roundCheck(self, player,maxRoundCount,zombieVel,deltaTime,currentTickZombieDamage):

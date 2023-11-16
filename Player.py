@@ -1,12 +1,13 @@
 import pygame, Grenade, Assets, Bullet, Game
 class Player:
-    def __init__(self, VEL, healablesOwned, grenadeCount):
+    def __init__(self, VEL, healablesOwned, grenadeCount, Pistol, Shotgun, AK47):
         self.MAXHEALTH = 1000
         self.playerHealth = 1000
         self.isAlive = True
         self.playerTakingDamage = False
         #its a number instead, 0 is handgun, 1 is shotgun and 2 is AK
-        self.playerGun = 0
+        self.playerCurrentGun = []
+        self.platerInventoryGuns = [Pistol, Shotgun, AK47]
         self.isWalking = False
         self.sprite = Assets.playerSpriteIdelHandgun
         self.playerx = Assets.CENTERX
@@ -29,7 +30,7 @@ class Player:
     def getPlayerTakingDamage(self):
         return self.playerTakingDamage
     def getPlayerGun(self):
-        return self.playerGun
+        return self.playerCurrentGun
     def getIsWalking(self):
         return self.isWalking
     def getSprite(self):
@@ -64,19 +65,19 @@ class Player:
         elif self.isWalking == False:
             self.walkingSound.stop()
     
-    def playerMovement(self,keysPressed, zombies, objects, gun, currentTickHeal, nowHealing, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade, mousex,mousey):
+    def playerMovement(self,keysPressed, zombies, objects, currentTickHeal, nowHealing, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade, mousex,mousey):
         if self.playerHealth > 0:
             
-            if keysPressed[pygame.K_r] and gun[self.playerGun].currentAmmo != gun[self.playerGun].MAXAMMO:
+            if keysPressed[pygame.K_r] and self.getPlayerGun().getCurrentAmmo() != self.getPlayerGun().MAXAMMO:
                 self.isReloading = True
-                gun[self.playerGun].getGunReloading()
-                gun[self.playerGun].currentAmmo = gun[self.playerGun].MAXAMMO
+                self.playerGun.getGunReloading()
+                self.getPlayerGun().currentAmmo = self.getPlayerGun().MAXAMMO
             if keysPressed[pygame.K_1]:
-                self.playerGun = 0
+                self.playerGun = self.platerInventoryGuns[0]
             if keysPressed[pygame.K_2]:
-                self.playerGun = 1
+                self.playerGun = self.platerInventoryGuns[1]
             if keysPressed[pygame.K_3]:
-                self.playerGun = 2
+                self.playerGun = self.platerInventoryGuns[2]
             
             #grenade is 4
             nowTossGrenade = pygame.time.get_ticks()

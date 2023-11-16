@@ -1,5 +1,5 @@
 import math
-from random import choice
+from random import choice, randint
 import random
 
 import pygame, Assets
@@ -94,14 +94,11 @@ class Zombie:
         if player.playerTakingDamage == True:
             player.playerHealth -= self.damageAmount
 
-    def randomZombieTakingDamageSound(self):
-        self.zombieDamageToPlayerSounds[random.randint(0,len(self.zombieDamageToPlayerSounds)-1)].play()
-
     def randomZombieAttackSound(self,player,currentTickZombieDamage):
         nowZombieDamage = pygame.time.get_ticks()
         if nowZombieDamage - currentTickZombieDamage >= random.randint(1000,10000) and self.canBeHit and abs(self.getZombiex() - player.getPlayerx()) < 100 and abs(self.getZombiey()-player.getPlayery()) < 100:
             currentTickZombieDamage = nowZombieDamage
-            self.randomZombieAttackSound
+            self.zombieDamageToPlayerSounds[randint(0,len(self.zombieDamageToPlayerSounds))]
             self.zombieDamageToPlayer(player)
 
     def rotateZombie(self, player):
