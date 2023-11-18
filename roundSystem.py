@@ -23,10 +23,6 @@ class Round():
         else:
             EndGame.endGameScreen(True)
 
-    def setZombieSpawn(self, exclusion, rangeLower, rangeUpper):
-        self.zombieX = choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
-        self.zombieY = choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
-
     def NewRound(self, round,maxRoundCount, zombieVel):
         self.roundCount = round
         #upper limit is 200 zombies loaded on screen
@@ -44,9 +40,9 @@ class Round():
         rangeLower = -1000
         rangeUpper = 1000
         for i in range(self.maxZombieCount):
-            x = self.zombieX = choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
-            y = self.zombieY = choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
-            self.zombies.append(Zombie.Zombie(i, True, zombieVel, x, y ))
+            x = choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
+            y = choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
+            self.zombies.append(Zombie.Zombie(i, zombieVel, x, y ))
         for i in range(self.maxZombieCount):
             self.HealthPool = 1
             print(self.zombies) 

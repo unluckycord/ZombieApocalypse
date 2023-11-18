@@ -4,7 +4,7 @@ import random
 
 import pygame, Assets
 class Zombie:
-    def __init__(self,zombieCount, dealingDamage, Vel, x , y):
+    def __init__(self,zombieCount, Vel, x , y):
         self.zombieCount = zombieCount
         self.MAXHEALTH = 100
         self.zombieHealth = 100
@@ -19,7 +19,7 @@ class Zombie:
         self.zombiew = Assets.PLAYERW-10
         self.zombieh = Assets.PLAYERH-10
         self.zombieHitBox = pygame.draw.rect(Assets.WIN, Assets.WHITE, (self.zombieX, self.zombieY, self.zombieh, self.zombiew))
-        self.zombieAttackHitBox = pygame.draw.rect(Assets.WIN, Assets.BLACK, (self.zombieX, self.zombieY, self.zombieh/2, self.zombiew/2)).clamp(self.zombieHitBox)
+        self.zombieCollsionHitbox = pygame.draw.rect(Assets.WIN, Assets.BLACK, (self.zombieX, self.zombieY, self.zombieh/2, self.zombiew/2)).clamp(self.zombieHitBox)
         self.canBeHit = True
         self.canWalk = True
         self.isAlive = True
