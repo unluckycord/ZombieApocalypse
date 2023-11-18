@@ -13,7 +13,7 @@ class Bullet:
         self.mousey = mousey
         self.vel = vel
 
-        self.bulletHead = pygame.draw.circle(Assets.WIN, Assets.RED, (self.bulletx, self.bullety), 2)
+        self.projectile = pygame.draw.circle(Assets.WIN, Assets.RED, (self.bulletx, self.bullety), 2)
         self.casing = Assets.playerBullet
         
         self.angle = math.atan2(bullety-mousey, bulletx - mousex)
@@ -29,8 +29,10 @@ class Bullet:
         return self.bullety
     def getVel(self):
         return self.vel
-    def getRenderBullet(self):
-        return self.renderBullet
+    def getCasing(self):
+        return self.casing
+    def getProjectile(self):
+        return self.projectile
     def getAngle(self):
         return self.angle
     def getSprite(self):

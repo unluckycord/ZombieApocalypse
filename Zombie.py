@@ -98,7 +98,7 @@ class Zombie:
         nowZombieDamage = pygame.time.get_ticks()
         if nowZombieDamage - currentTickZombieDamage >= random.randint(1000,10000) and self.canBeHit and abs(self.getZombiex() - player.getPlayerx()) < 100 and abs(self.getZombiey()-player.getPlayery()) < 100:
             currentTickZombieDamage = nowZombieDamage
-            self.zombieDamageToPlayerSounds[randint(0,len(self.zombieDamageToPlayerSounds))]
+            self.zombieDamageToPlayerSounds[randint(0,8)]
             self.zombieDamageToPlayer(player)
 
     def rotateZombie(self, player):

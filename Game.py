@@ -56,7 +56,6 @@ def start(maxRoundCount):
         for i in range(len(grenades)):
             grenades[i].grenadeVel = grenadeVel * deltaTime * Assets.TARGETFPS
         
-        f = player.getPlayerGun().getVel(pistolVel,deltaTime)
         mousex, mousey = pygame.mouse.get_pos()
         angle = math.degrees(math.atan2(Assets.CENTERX-mousex+20,Assets.CENTERY-mousey+20))-270
         playersVariables(keysPressed,player, Round.zombies, objects ,currentTickHeal, nowHealing, angle, mousex, mousey, grenades, grenadeVel, currentTickTossGrenade, nowTossGrenade)

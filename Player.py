@@ -6,7 +6,7 @@ class Player:
         self.isAlive = True
         self.playerTakingDamage = False
         #its a number instead, 0 is handgun, 1 is shotgun and 2 is AK
-        self.playerCurrentGun = []
+        self.playerGun = Pistol
         self.platerInventoryGuns = [Pistol, Shotgun, AK47]
         self.isWalking = False
         self.sprite = Assets.playerSpriteIdelHandgun
@@ -30,7 +30,9 @@ class Player:
     def getPlayerTakingDamage(self):
         return self.playerTakingDamage
     def getPlayerGun(self):
-        return self.playerCurrentGun
+        return self.playerGun
+    def gerPlayerGunInventory(self):
+        return self.platerInventoryGuns
     def getIsWalking(self):
         return self.isWalking
     def getSprite(self):
