@@ -1,5 +1,5 @@
 import pygame,Assets,Zombie,Game,random
-def drawWindow(player, zombies, objects, gameConfig, angle,zombieHurtSounds,currentTickZombieTakeDamage, nowZombieTakeDamage):
+def drawWindow(player, zombies, objects, gameConfig, angle,currentTickZombieTakeDamage, nowZombieTakeDamage):
     randomSound = random.randint(0, 2)
     nowZombieTakeDamage = pygame.time.get_ticks()
     
@@ -8,10 +8,7 @@ def drawWindow(player, zombies, objects, gameConfig, angle,zombieHurtSounds,curr
     for i in range(len(objects)):
         Assets.WIN.blit(objects[i].getSprite(), (objects[i].getPosX(), objects[i].getPosY()))
     for zombie in zombies:
-        if zombie.getZombieHealth()  < 1:
-            Assets.WIN.blit(Assets.zombieSpriteCorpse, (zombie.getZombiex(), zombie.getZombiey()))
-        else:
-            Assets.WIN.blit(zombie.getSprite(), (zombie.getZombiex(), zombie.getZombiey()))
+        Assets.WIN.blit(zombie.getSprite(player), (zombie.getZombiex(), zombie.getZombiey()))
     Assets.WIN.blit(player.getSprite(), (player.getPlayerx(), player.getPlayery()))
     
     

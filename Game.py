@@ -11,7 +11,7 @@ def playersVariables(keysPressed, player, zombies, objects, currentTickHeal, now
 
 def start(maxRoundCount):
     PlayerVel = 3
-    zombieVel = 1
+    zombieVel = 2
     pistolVel = 4
     shotgunVel = 2
     akVel = 9
@@ -95,8 +95,7 @@ def start(maxRoundCount):
 
         if player.getPlayerHealth() < 0:
             EndGame.endGameScreen(False)
-        #FIX THIS IMMEDITLY
-        PaintGame.drawWindow(player, Round.zombies, objects, gameConfig, angle,zombieHurtSounds, currentTickZombieTakeDamage, nowZombieTakeDamage)
+        PaintGame.drawWindow(player, Round.zombies, objects, gameConfig, angle, currentTickZombieTakeDamage, nowZombieTakeDamage)
         pygame.display.update()
         
     pygame.quit()

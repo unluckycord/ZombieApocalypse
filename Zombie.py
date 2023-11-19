@@ -13,7 +13,7 @@ class Zombie:
         self.dealingDamage = True
         self.zombieDamageToPlayerSounds = [Assets.ZOMBIEATTACK1,Assets.ZOMBIEATTACK2,Assets.ZOMBIEATTACK3,Assets.ZOMBIEATTACK4,Assets.ZOMBIEATTACK5,Assets.ZOMBIEATTACK6,Assets.ZOMBIEATTACK7,Assets.ZOMBIEATTACK8,Assets.ZOMBIEATTACK9]
         self.zombieHurtSounds = [Assets.ZOMBIEHURT1,Assets.ZOMBIEHURT2,Assets.ZOMBIEHURT3]
-        self.sprite = Assets.zombieSpriteCorpse
+        self.sprite = Assets.zombieSpriteIdel
         self.zombieX = x
         self.zombieY = y
         self.zombiew = Assets.PLAYERW-10
@@ -40,9 +40,12 @@ class Zombie:
         return self.damageAmount
     def getDealingDamage(self):
         return self.dealingDamage
-    def getSprite(self):
+    def getSprite(self,player):
         if self.isAlive:
-            self.sprite = Assets.zombieSpriteIdel
+            angleRelToPlayer = math.degrees(math.atan2(self.getZombiex() - player.getPlayerx(),self.getZombiey() - player.getPlayery()))-270
+            self.sprite = pygame.transform.rotate(Assets.zombieSpriteIdel.copy(), angleRelToPlayer)
+        else:
+            self.sprite = Assets.zombieSpriteCorpse
         return self.sprite
     def getZombiex(self):
         return self.zombieX
@@ -100,11 +103,6 @@ class Zombie:
             currentTickZombieDamage = nowZombieDamage
             self.zombieDamageToPlayerSounds[randint(0,8)]
             self.zombieDamageToPlayer(player)
-
-    def rotateZombie(self, player):
-        angleRelToPlayer = math.degrees(math.atan2(self.getZombiex() - player.getPlayerx(),self.getZombiey() - player.getPlayery()))-270
-        self.sprite = pygame.transform.rotate(Assets.zombieSpriteIdel.copy(), angleRelToPlayer)
-
     def zombieDeathCheck(self):
         if self.getZombieHealth == 0:
             self.isAlive = False
@@ -112,8 +110,6 @@ class Zombie:
     def zombieBrain(self,player,deltaTime,zombieVel,currentTickZombieDamage):
             self.Vel = deltaTime * Assets.TARGETFPS * zombieVel
             if self.isAlive:
-                self.zombieMovement(player)
-                self.rotateZombie(player)
                 self.zombieMovement(player)
                 self.randomZombieAttackSound(player,currentTickZombieDamage)
                 self.zombieDeathCheck()
