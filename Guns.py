@@ -1,7 +1,7 @@
 from random import randint
 import pygame
 import Assets
-from Bullet import Bullet
+import Bullet
 
 class Guns:
     def __init__(self, currentSprite, spriteShooting, idelSprite, gun, gunSound, gunReloading, MAXAMMO, currentAmmo, cooldown, cooldownReloading, vel, gunDamage):
