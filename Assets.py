@@ -47,6 +47,8 @@ playerSpriteHandgunMuzzle = pygame.transform.scale(pygame.image.load(
     "Assets/sprites/playerSprites/handgun/shoot/playerShootingHandgun.png"), (PLAYERW, PLAYERH))
 playerBullet = pygame.transform.scale(pygame.image.load(
     "Assets/sprites/bullet.png"), (20,20))
+playerBulletProjectile = pygame.transform.scale(pygame.image.load(
+    "Assets/sprites/bulletProjectile.png"), (20,20))
 playerSlug = pygame.transform.scale(pygame.image.load(
     "Assets/sprites/slug.png"), (20,20))
 

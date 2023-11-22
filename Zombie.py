@@ -19,7 +19,7 @@ class Zombie:
         self.zombiew = Assets.PLAYERW-10
         self.zombieh = Assets.PLAYERH-10
         self.zombieHitBox = pygame.draw.rect(Assets.WIN, Assets.WHITE, (self.zombieX, self.zombieY, self.zombieh, self.zombiew))
-        self.zombieCollsionHitbox = pygame.draw.rect(Assets.WIN, Assets.BLACK, (self.zombieX, self.zombieY, self.zombieh/2, self.zombiew/2)).clamp(self.zombieHitBox)
+        self.zombieCollsionHitbox = pygame.draw.rect(Assets.WIN, Assets.BLACK, (self.zombieX, self.zombieY, self.zombieh*0.75, self.zombiew*0.75)).clamp(self.zombieHitBox)
         self.canBeHit = True
         self.canWalk = True
         self.isAlive = True
@@ -94,7 +94,7 @@ class Zombie:
         self.zombieY += self.velocity.y
             
     def zombieDamageToPlayer(self, player):
-        if player.playerTakingDamage == True:
+        if pygame.Rect.colliderect(self.zombieHitBox , player.playerHitBox):
             player.playerHealth -= self.damageAmount
 
     def randomZombieAttackSound(self,player,currentTickZombieDamage):

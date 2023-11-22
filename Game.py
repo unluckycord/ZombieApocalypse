@@ -64,7 +64,6 @@ def start(maxRoundCount):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-                
         mouseInput = pygame.mouse.get_pressed()
         if mouseInput == (1, 0, 0):
             #checks if player can shoot based on trigger pull

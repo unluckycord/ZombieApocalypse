@@ -60,23 +60,20 @@ class Guns:
     def zombieBulletCollison(self, player, zombie):
         nowZombieTakeDamage = pygame.time.get_ticks()
         if zombie.isAlive:
-            zombie.canBeHit = True
             for bullet in self.bullets:
-                Assets.WIN.blit(bullet.bulletHead,(bullet.getBulletx(), bullet.getBullety()))
+                Assets.WIN.blit(bullet.projectile,(bullet.getBulletx(), bullet.getBullety()))
                 if(bullet.getBulletx() > 5000 or 
                    bullet.getBullety() > 5000 or 
                    bullet.getBulletx() < -5000 or 
                    bullet.getBullety() < -5000):
                     self.bullets.remove(bullet)
-                if(pygame.Rect.colliderect(bullet.bulletHead, 
+                if(pygame.Rect.colliderect(bullet.projectileHitbox, 
                                            zombie.zombieHitBox) and self.getCanBeHit()):
                     self.bullets.remove(bullet)
                     zombie.randomZombieTakingDamageSound()
                     zombie.zombieHealth -= self.getGunDamage(player.getPlayerx(), player.getPlayery(), self.getZombiex(), self.getZombiey())
-            if pygame.Rect.colliderect(self.zombieHitBox , player.playerHitBox):
-                player.playerTakingDamage = True
-            else:
-                player.playerTakingDamage = False
+        else:
+            zombie.canBeHit = False
 
     def getGunDamage(self, playerx, playery, zombiex, zombiey):
         if self.gun ==1:

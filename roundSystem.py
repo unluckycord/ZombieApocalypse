@@ -54,6 +54,8 @@ class Round():
             player.playerHealth = player.MAXHEALTH
             self.NewRound(self.roundCount+1,maxRoundCount, zombieVel)
         else:
+            
             for i in range(len(self.zombies)):
+                player.getPlayerGun().zombieBulletCollison(player, self.zombies[i])
                 self.zombies[i].zombieBrain(player,deltaTime,zombieVel,currentTickZombieDamage)
 

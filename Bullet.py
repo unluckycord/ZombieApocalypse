@@ -12,8 +12,8 @@ class Bullet:
         self.mousex = mousex
         self.mousey = mousey
         self.vel = vel
-
-        self.projectile = pygame.draw.circle(Assets.WIN, Assets.RED, (self.bulletx, self.bullety), 2)
+        self.projectile = Assets.playerBulletProjectile
+        self.projectileHitbox = pygame.draw.rect(Assets.WIN, Assets.RED, (self.bulletx, self.bullety, 20, 20))
         self.casing = Assets.playerBullet
         
         self.angle = math.atan2(bullety-mousey, bulletx - mousex)
