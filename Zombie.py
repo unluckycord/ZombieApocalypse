@@ -1,5 +1,4 @@
 import math
-from random import choice, randint
 import random
 
 import pygame, Assets
@@ -63,9 +62,9 @@ class Zombie:
         return self.canBeHit
     
     def randomZombiePosx(self, exclusion, rangeLower, rangeUpper):
-        return choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
+        return random.choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
     def randomZombiePosy(self, exclusion, rangeLower, rangeUpper):
-        return choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
+        return random.choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
     
     def zombieMovement(self, player):
         #tempArrX = [round(self.getZombiex())]
@@ -101,7 +100,7 @@ class Zombie:
         nowZombieDamage = pygame.time.get_ticks()
         if nowZombieDamage - currentTickZombieDamage >= random.randint(1000,10000) and self.canBeHit and abs(self.getZombiex() - player.getPlayerx()) < 100 and abs(self.getZombiey()-player.getPlayery()) < 100:
             currentTickZombieDamage = nowZombieDamage
-            self.zombieDamageToPlayerSounds[randint(0,8)]
+            self.zombieDamageToPlayerSounds[random.randint(0,8)]
             self.zombieDamageToPlayer(player)
     def zombieDeathCheck(self):
         if self.getZombieHealth == 0:
