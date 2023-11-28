@@ -78,7 +78,6 @@ def start(maxRoundCount):
             #if checks pass, player can shoot
             if player.canShoot and player.isReloading != True:
                 currentTickShooting = nowShooting
-                nowBullet = pygame.time.get_ticks()
                 player.getPlayerGun().createBullet(player, pistolVel, shotgunVel, deltaTime, mousex, mousey)
                 
         else:

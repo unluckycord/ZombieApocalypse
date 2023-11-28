@@ -43,6 +43,7 @@ class Guns:
         self.vel = gunVel * deltaTime * Assets.TARGETFPS
         return self.vel
     
+
     def createBullet(self, player, pistolVel, shotgunVel, deltaTime, mousex, mousey):
         if self.currentAmmo > 0:
             if(player.getPlayerGun())==1:
@@ -61,6 +62,8 @@ class Guns:
         nowZombieTakeDamage = pygame.time.get_ticks()
         if zombie.isAlive:
             for bullet in self.bullets:
+                bullet.bulletHitbox(player)
+                #print(bullet.getBulletx(), bullet.getBullety())
                 Assets.WIN.blit(bullet.projectile,(bullet.getBulletx(), bullet.getBullety()))
                 if(bullet.getBulletx() > 5000 or 
                    bullet.getBullety() > 5000 or 
@@ -68,7 +71,8 @@ class Guns:
                    bullet.getBullety() < -5000):
                     self.bullets.remove(bullet)
                 if(pygame.Rect.colliderect(bullet.projectileHitbox, 
-                                           zombie.zombieHitBox) and self.getCanBeHit()):
+                                           zombie.zombieHitBox)):
+                    print('hit')
                     self.bullets.remove(bullet)
                     zombie.randomZombieTakingDamageSound()
                     zombie.zombieHealth -= self.getGunDamage(player.getPlayerx(), player.getPlayery(), self.getZombiex(), self.getZombiey())
@@ -94,3 +98,6 @@ class Guns:
         else:
             return self.gunDamage 
     
+    def gunOpperation(self,player,zombie):
+        if len(self.bullets)>0:
+            self.zombieBulletCollison(player, zombie)
