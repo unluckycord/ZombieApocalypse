@@ -67,18 +67,6 @@ class Zombie:
         return random.choice([i for i in range(rangeLower, rangeUpper) if i not in exclusion])
     
     def zombieMovement(self, player):
-        #tempArrX = [round(self.getZombiex())]
-        #tempArrY = [round(self.getZombiey())]
-        #for i in range(len(zombies)):
-            #if i == self.zombieCount:
-            #    break
-            #else:
-                #need to redo collison#
-                #if zombies[i].getZombieHealth() > 0:
-                #    if 0 <= abs(tempArrY[0] - zombieLocationsY[i]) < 50 and 0 <= abs(tempArrX[0] - zombieLocationsX[i]) < 50:
-                #        self.canWalk = False
-                #    else:
-                #        self.canWalk = True
         playerVector = pygame.math.Vector2(player.getPlayerx(), player.getPlayery())
         zombieVector = pygame.math.Vector2(self.zombieX, self.zombieY)
         distance = (playerVector - zombieVector).magnitude()
