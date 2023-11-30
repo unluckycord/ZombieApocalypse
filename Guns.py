@@ -70,9 +70,7 @@ class Guns:
                    bullet.getBulletx() < -5000 or 
                    bullet.getBullety() < -5000):
                     self.bullets.remove(bullet)
-                if(pygame.Rect.colliderect(bullet.projectileHitbox, 
-                                           zombie.zombieHitBox)):
-                    print('hit')
+                if(pygame.Rect.colliderect(bullet.projectileHitbox, zombie.zombieHitBox)):
                     self.bullets.remove(bullet)
                     zombie.randomZombieTakingDamageSound()
                     zombie.zombieHealth -= self.getGunDamage(player.getPlayerx(), player.getPlayery(), self.getZombiex(), self.getZombiey())
