@@ -62,14 +62,14 @@ class Guns:
         nowZombieTakeDamage = pygame.time.get_ticks()
         if zombie.isAlive:
             for bullet in self.bullets:
-                bullet.bulletHitbox(player)
-                #print(bullet.getBulletx(), bullet.getBullety())
-                Assets.WIN.blit(bullet.projectile,(bullet.getBulletx(), bullet.getBullety()))
+                print(bullet.getBulletx(), bullet.getBullety())
                 if(bullet.getBulletx() > 5000 or 
                    bullet.getBullety() > 5000 or 
                    bullet.getBulletx() < -5000 or 
                    bullet.getBullety() < -5000):
                     self.bullets.remove(bullet)
+                else:
+                    bullet.getBulletMovement(player)
                 if(pygame.Rect.colliderect(bullet.projectileHitbox, zombie.zombieHitBox)):
                     self.bullets.remove(bullet)
                     zombie.randomZombieTakingDamageSound()

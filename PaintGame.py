@@ -8,10 +8,12 @@ def drawWindow(player, zombies, objects, gameConfig, angle,currentTickZombieTake
     for i in range(len(objects)):
         Assets.WIN.blit(objects[i].getSprite(), (objects[i].getPosX(), objects[i].getPosY()))
     for zombie in zombies:
-        Assets.WIN.blit(zombie.getSprite(player), (zombie.getZombiex(), zombie.getZombiey()))
+        zombie.zombieCollsionHitbox = Assets.WIN.blit(zombie.getSprite(player), (zombie.getZombiex(), zombie.getZombiey()))
+    for bullet in player.getPlayerGun().bullets:
+        bullet.projectileHitbox = Assets.WIN.blit(bullet.projectile,(bullet.bulletx, bullet.bulletx))
     Assets.WIN.blit(player.getSprite(), (player.getPlayerx(), player.getPlayery()))
-    
-    
+
+
     if gameConfig.getHUD():
         #draws HUD
         Assets.WIN.blit(Assets.START_FONT_BOLD_ITALIC.render(str(player.getPlayerGun().getCurrentAmmo()),1, Assets.RED),((20),(20)))

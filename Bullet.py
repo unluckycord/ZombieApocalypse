@@ -13,7 +13,7 @@ class Bullet:
         self.mousey = mousey
         self.vel = vel
         self.projectile = Assets.playerBulletProjectile
-        self.projectileHitbox = pygame.draw.rect(Assets.WIN, Assets.RED, (self.bulletx, self.bullety, 20, 20))
+        self.projectileHitbox = pygame.draw.rect(Assets.WIN, Assets.RED, (self.bulletx, self.bullety, 200, 200))
         self.casing = Assets.playerBullet
         
         self.angle = math.atan2(bullety-mousey, bulletx - mousex)
@@ -37,7 +37,7 @@ class Bullet:
         return self.angle
     def getSprite(self):
         return self.sprite
-    def bulletHitbox(self, player):
+    def getBulletMovement(self, player):
         self.bulletx -= int(self.xvel)
         self.bullety -= int(self.yvel)
         if player.getPlayerGun() == 1:
